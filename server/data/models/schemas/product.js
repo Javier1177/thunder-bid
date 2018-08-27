@@ -20,10 +20,7 @@ module.exports = new Schema({
         required: true
     },
 
-    finalDate: {
-        type: Date,
-        required: true
-    },
+    finalDate: Date,
 
     initialPrice: {
         type: Number,
@@ -45,13 +42,9 @@ module.exports = new Schema({
         type: ObjectId
     },
 
-    closed: {
-        type: Boolean
-    },
+    closed: Boolean,
 
-    image: {
-        type: String
-    },
+    image: String,
 
     userWining: {
         ref: 'User',
@@ -59,8 +52,14 @@ module.exports = new Schema({
     },
 
     auctionWining: {
-        ref: 'Auction'
+        ref: 'Auction',
+        type: ObjectId
     },
 
-    auntion: [auction]
+    category: {
+        ref: 'Category',
+        type: ObjectId
+    },
+
+    auction: [auction]
 })

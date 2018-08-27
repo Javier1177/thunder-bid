@@ -1,11 +1,13 @@
 const Auction = require('./auction')
+const Category = require('./category')
 const Product = require('./product')
 const User = require('./user')
-const WishedList = require('./wishedList')
+const Wish = require('./wish')
 
 module.exports =  {
     Auction,
+    Category,
     Product,
     User,
-    WishedList
+    Wish
 }

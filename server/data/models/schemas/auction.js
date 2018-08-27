@@ -15,7 +15,8 @@ module.exports = new Schema({
     
     user: {
         ref: 'User',
-        type: ObjectId,
+        type: String,
+        // type: ObjectId,
         required: true
     }
 })
