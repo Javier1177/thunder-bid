@@ -24,7 +24,7 @@ describe('logic', () => {
         return Promise.all([Product.remove(), User.remove()])
     })
 
-    false && describe('validate fields', () => {
+    describe('validate fields', () => {
         it('should succed on correct values', () => {
             expect(() => logic._validateStringField('password', password).to.equal(password))
         })
@@ -58,7 +58,7 @@ describe('logic', () => {
         })
     })
 
-    describe('register user', () => {
+    false && describe('register user', () => {
         it('should register correctly', () =>
             User.findOne({ email })
                 .then(user => {
