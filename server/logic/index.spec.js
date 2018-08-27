@@ -2,8 +2,7 @@
 require ('dotenv').config()
 
 
-const { logic } = require('.')
-const { validate } = require('../utils/validation')
+const {logic} = require('.')
 const { expect } = require('chai')
 const mongoose = require('mongoose')
 const { models: {Product, User, Category, Auction} } = require('../data')
@@ -25,6 +24,39 @@ describe('logic', () => {
         return Promise.all([Product.remove(), User.remove()])
     })
 
+    false && describe('validate fields', () => {
+        it('should succed on correct values', () => {
+            expect(() => logic._validateStringField('password', password).to.equal(password))
+        })
+
+        it('should fail on undefined password', () => {
+            expect(() => logic._validateStringField('password', undefined)).to.throw(`invalid password`)
+        })
+
+        it('should fail on empty password', () => {
+            expect(() => logic._validateStringField('password', '')).to.throw(`invalid password`)
+        })
+
+        it('should fail on numeric password', () => {
+            expect(() => logic._validateStringField('password', 123)).to.throw(`invalid password`)
+        })
+
+        it('should fail on space password', () => {
+            expect(() => logic._validateStringField('password', ' ')).to.throw(`invalid password`)
+        })
+
+        it('should fail on a password starting with space', () => {
+            expect(() => logic._validateStringField('password', ' 123')).to.throw(`invalid password`)
+        })
+
+        it('should fail on a password ending with space', () => {
+            expect(() => logic._validateStringField('password', '123 ')).to.throw(`invalid password`)
+        })
+
+        it('should fail on a password with space between words', () => {
+            expect(() => logic._validateStringField('password', '1 2 3')).to.throw(`invalid password`)
+        })
+    })
 
     describe('register user', () => {
         it('should register correctly', () =>
@@ -129,9 +161,9 @@ describe('logic', () => {
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal('invalid password'))
         )
-    })
 
-    
+
+    })
 
     after(() => 
         Promise.all([
