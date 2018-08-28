@@ -1,23 +1,15 @@
 const { Product, User, Category, Auction} = require('../data/models')
-const validateEmail = require('../utils/validate-email')
+const { validate } = require('../utils/validate')
 
 const logic = {
-
-    _validateStringField(name, value) {
-        if (typeof value !== 'string' || !value.length || value.indexOf(' ') >= 0) throw new Error(`invalid ${name}`)
-    },
-
-    _validateEmail(email) {
-        if (!validateEmail(email)) throw new Error('invalid email')
-    },
 
     register(email, password, name, surname){
         return Promise.resolve()
             .then(() => {
-                this._validateEmail(email)
-                this._validateStringField('password', password)
-                this._validateStringField('name', name)
-                this._validateStringField('surname', surname)
+                validate._validateEmail(email)
+                validate._validateStringField('password', password)
+                validate._validateStringField('name', name)
+                validate._validateStringField('surname', surname)
 
                 return User.findOne({ email })
             })
