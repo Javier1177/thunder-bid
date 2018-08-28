@@ -287,7 +287,7 @@ describe('logic', () => {
     })
 
     !true && describe('update password', () => {
-        const newPassword = '123456', notExistingEmail = 'jlb@gmail.com', email= 'javier@gmail.com', password = '123', name = 'Javi', surname = 'Lopez'
+        const newPassword = '123456', notExistingEmail = 'jlb@gmail.com', email= 'javier@gmail.com', password = '123', name = 'Javi', surname = 'Lopez', wrongPassword = '987'
 
 
         beforeEach(() => User.create({ email, password, name, surname }))
@@ -425,6 +425,12 @@ describe('logic', () => {
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal('invalid password'))
         )
+
+        it('should fail on trying to update password with a password that ends with space', () =>
+        logic.updatePassword(email, wrongPassword, newPassword)
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('wrong password'))
+    )
     })
 
     !true && describe('list user products', () => {
