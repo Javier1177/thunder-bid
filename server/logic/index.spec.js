@@ -25,7 +25,6 @@ describe('logic', () => {
     })
 
 
-
     describe('register user', () => {
         it('should register correctly', () =>
             User.findOne({ email })
@@ -36,17 +35,17 @@ describe('logic', () => {
                 })
                 .then(res => {
                     expect(res).to.be.true
-
+        
                     return User.findOne({ email })
                 })
                 .then(user => {
-                    expect(user._doc).to.exist
-                    expect(user._doc.email).to.equal(email)
-                    expect(user._doc.password).to.equal(password)
-                    expect(user._doc.name).to.equal(name)
-                    expect(user._doc.surname).to.equal(surname)
+                    expect(user).to.exist
+                    expect(user.email).to.equal(email)
+                    expect(user.password).to.equal(password)
+                    expect(user.name).to.equal(name)
+                    expect(user.surname).to.equal(surname)
                     return User.find()
-                })
+                        })
         )
 
         it('should fail on trying to register an already registered user', () =>
@@ -59,77 +58,150 @@ describe('logic', () => {
         )
 
         it('should fail on trying to register with an undefined email', () =>
-            logic.register(undefined, password)
+            logic.register(undefined, password, name, surname)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal('invalid email'))
         )
 
         it('should fail on trying to register with an empty email', () =>
-            logic.register('', password)
+            logic.register('', password, name, surname)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal('invalid email'))
         )
 
         it('should fail on trying to register with a numeric email', () =>
-            logic.register(123, password)
+            logic.register(123, password, name, surname)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal('invalid email'))
         )
 
         it('should fail on trying to register with a space as email', () =>
-            logic.register(' ', password)
+            logic.register(' ', password, name, surname)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal('invalid email'))
         )
 
         it('should fail on trying to register with a space on the start of the email', () =>
-        logic.register(' '+email, password)
+        logic.register(' '+email, password, name, surname)
             .catch(err => err)
             .then(({ message }) => expect(message).to.equal('invalid email'))
         )
 
         it('should fail on trying to register with a space on the end of the email', () =>
-        logic.register(email+' ', password)
+        logic.register(email+' ', password, name, surname)
             .catch(err => err)
             .then(({ message }) => expect(message).to.equal('invalid email'))
         )
 
         it('should fail on trying to register with an undefined password', () =>
-            logic.register(email, undefined)
+            logic.register(email, undefined, name, surname)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal('invalid password'))
         )
 
         it('should fail on trying to register with an empty password', () =>
-            logic.register(email, '')
+            logic.register(email, '', name, surname)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal('invalid password'))
         )
 
         it('should fail on trying to register with a numeric password', () =>
-            logic.register(email, 123)
+            logic.register(email, 123, name, surname)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal('invalid password'))
         )
 
         it('should fail on trying to register with a space as password', () =>
-            logic.register(email, ' ')
+            logic.register(email, ' ', name, surname)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal('invalid password'))
         )
 
         it('should fail on trying to register with a space at the begining of the password', () =>
-            logic.register(email, ' '+password)
+            logic.register(email, ' '+password, name, surname)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal('invalid password'))
         )
 
         it('should fail on trying to register with a space at the end of the password', () =>
-            logic.register(email, password+' ')
+            logic.register(email, password+' ', name, surname)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal('invalid password'))
         )
 
+
+        it('should fail on trying to register with an undefined name', () =>
+        logic.register(email, password, undefined, surname)
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid name'))
+        )
+
+        it('should fail on trying to register with an empty name', () =>
+            logic.register(email, password, '', surname)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid name'))
+        )
+
+        it('should fail on trying to register with a numeric name', () =>
+            logic.register(email, password, 123, surname)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid name'))
+        )
+
+        it('should fail on trying to register with a space as name', () =>
+            logic.register(email, password, ' ', surname)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid name'))
+        )
+
+        it('should fail on trying to register with a space at the begining of the name', () =>
+            logic.register(email, password, ' '+name, surname)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid name'))
+        )
+
+        it('should fail on trying to register with a space at the end of the name', () =>
+            logic.register(email, password, name+' ', surname)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid name'))
+        )
+
+        
+        it('should fail on trying to register with an undefined surname', () =>
+        logic.register(email, password, name, undefined)
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid surname'))
+        )
+
+        it('should fail on trying to register with an empty surname', () =>
+            logic.register(email, password, name, '')
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid surname'))
+        )
+
+        it('should fail on trying to register with a numeric surname', () =>
+            logic.register(email, password, name, 123)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid surname'))
+        )
+
+        it('should fail on trying to register with a space as surname', () =>
+            logic.register(email, password, name, ' ')
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid surname'))
+        )
+
+        it('should fail on trying to register with a space at the begining of the surname', () =>
+            logic.register(email, password, name, ' '+surname)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid surname'))
+        )
+
+        it('should fail on trying to register with a space at the end of the surname', () =>
+            logic.register(email, password, name, surname+' ')
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid surname'))
+        )
 
     })
 
