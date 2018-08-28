@@ -166,9 +166,9 @@ describe('logic', () => {
                 .then(({ message }) => expect(message).to.equal('invalid name'))
         )
 
-        
+
         it('should fail on trying to register with an undefined surname', () =>
-        logic.register(email, password, name, undefined)
+            logic.register(email, password, name, undefined)
             .catch(err => err)
             .then(({ message }) => expect(message).to.equal('invalid surname'))
         )
@@ -203,6 +203,227 @@ describe('logic', () => {
                 .then(({ message }) => expect(message).to.equal('invalid surname'))
         )
 
+    })
+
+    describe('login', () =>{
+        const notExistingEmail = 'jlb@gmail.com', incorrectPassword = '123456'
+
+        beforeEach(() => User.create({ email, password, name, surname }))
+
+        it('should login correctly', () =>
+            logic.authenticate(email, password)
+                .then(res => {
+                    expect(res).to.be.true
+                })
+        )
+
+        it('should fail on trying to login with an undefined email', () =>
+            logic.authenticate(undefined, password)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid email'))
+        )
+
+        it('should fail on trying to login with an empty email', () =>
+            logic.authenticate('', password)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid email'))
+        )
+
+        it('should fail on trying to login with a numeric email', () =>
+            logic.authenticate(123, password)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid email'))
+        )
+
+        it('should fail on trying to login with a username', () =>
+            logic.authenticate('jlb', password)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid email'))
+        )
+
+        it('should fail on trying to login with a space as email', () =>
+            logic.authenticate(' ', password)
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid email'))
+        )
+
+        it('should fail on trying to login with a not existing email', () =>
+            logic.authenticate(notExistingEmail, password)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal(`${notExistingEmail} does not exists`))
+        )
+
+        it('should fail on trying to login with an undefined password', () =>
+            logic.authenticate(email, undefined)
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal(`invalid password`))
+        )
+
+        it('should fail on trying to login with an empty password', () =>
+            logic.authenticate(email, '')
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal(`invalid password`))
+        )
+
+        it('should fail on trying to login with a numeric password', () =>
+            logic.authenticate(email, 123)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal(`invalid password`))
+        )
+
+        it('should fail on trying to login without a string as a password', () =>
+            logic.authenticate(email, ' ')
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid password'))
+        )
+
+        it('should fail on trying to login with an incorrect password', () =>
+        logic.authenticate(email, incorrectPassword)
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('wrong password'))
+    )
+
+    })
+
+    describe('update password', () => {
+        const newPassword = '123456'
+        const notExistingEmail = 'jlb@gmail.com'
+
+        beforeEach(() => User.create({ email, password, name, surname }))
+
+        it('should update password correctly', () =>
+            logic.updatePassword(email, password, newPassword)
+                .then(res => {
+                    expect(res).to.be.true
+
+                    return User.findOne({ email })
+                })
+                .then(user => {
+                    expect(user).to.exist
+                    expect(user.email).to.equal(email)
+                    expect(user.password).to.equal(newPassword)
+                })
+        )
+
+        it('should fail on trying to update a password with an undefined new password', () =>
+            logic.updatePassword(email, password, undefined)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid new password'))
+        )
+
+        it('should fail on trying to update a password with a numeric new password', () =>
+            logic.updatePassword(email, password, 123)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid new password'))
+        )
+
+        it('should fail on trying to update a password with a new pasword starting with a space', () =>
+            logic.updatePassword(email, password, ' '+newPassword)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid new password'))
+        )
+
+        it('should fail on trying to update a password with a new pasword ending with a space', () =>
+            logic.updatePassword(email, password, newPassword+' ')
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid new password'))
+        )
+
+        it('should fail on trying to update a password with a space as a new password', () =>
+            logic.updatePassword(email, password, ' ')
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid new password'))
+        )
+
+        it('should fail on trying to update a password with an empty new password', () =>
+            logic.updatePassword(email, password, '')
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid new password'))
+        )
+
+        it('should fail on trying to update password with the same password', () =>
+            logic.updatePassword(email, password, password)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('new password must be different'))
+        )
+
+        it('should fail on trying to update password with an undefined email', () =>
+            logic.updatePassword(undefined, password, newPassword)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid email'))
+        )
+
+        it('should fail on trying to update password with an empty email', () =>
+            logic.updatePassword('', password, newPassword)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid email'))
+        )
+
+        it('should fail on trying to update password with a numeric email', () =>
+            logic.updatePassword(123, password, newPassword)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid email'))
+        )
+
+        it('should fail on trying to update password with a space as email', () =>
+            logic.updatePassword(' ', password, newPassword)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid email'))
+        )
+
+        it('should fail on trying to update password with an email that starts with space', () =>
+            logic.updatePassword(' '+email, password, newPassword)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid email'))
+        )
+
+        it('should fail on trying to update password with an email that starts with space', () =>
+            logic.updatePassword(email+' ', password, newPassword)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid email'))
+        )
+
+        it('should fail on trying to update password with an email that does not exist', () =>
+            logic.updatePassword(notExistingEmail, password, newPassword)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal(`${notExistingEmail} does not exists`))
+        )
+
+        it('should fail on trying to update password with an undefined password', () =>
+            logic.updatePassword(email, undefined, newPassword)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid password'))
+        )
+
+        it('should fail on trying to update password with an empty password', () =>
+            logic.updatePassword(email, '', newPassword)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid password'))
+        )
+
+        it('should fail on trying to update password with a numeric password', () =>
+            logic.updatePassword(email, 123, newPassword)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid password'))
+        )
+
+        it('should fail on trying to update password with a space as a password', () =>
+            logic.updatePassword(email, ' ', newPassword)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid password'))
+        )
+
+        it('should fail on trying to update password with a password that starts with space', () =>
+            logic.updatePassword(email, ' '+password, newPassword)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid password'))
+        )
+
+        it('should fail on trying to update password with a password that ends with space', () =>
+            logic.updatePassword(email, password+' ', newPassword)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid password'))
+        )
     })
 
     after(() => 

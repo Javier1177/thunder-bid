@@ -19,7 +19,46 @@ const logic = {
                 return User.create({ email, password, name, surname})
             })
             .then(() => true)
+    },
+
+    authenticate(email, password){
+        return Promise.resolve()
+            .then(() => {
+                validate._validateEmail(email)
+                validate._validateStringField('password', password)
+
+                return User.findOne({ email })
+            })
+            .then(user => {
+                if(!user) throw new Error(`${email} does not exists`)
+                if (user.password !== password) throw new Error('wrong password')
+
+                return true
+            })
+    },
+
+    updatePassword(email, password, newPassword){
+        return Promise.resolve()
+            .then(() => {
+                validate._validateEmail(email)
+                validate._validateStringField('password', password)
+                validate._validateStringField('new password', newPassword)
+
+                return User.findOne({ email })
+            })
+            .then(user => {
+                if(!user) throw new Error(`${email} does not exists`)
+                if (user.password !== password) throw new Error('wrong password')   
+                if(user.password === newPassword) throw new Error('new password must be different')
+
+                user.password = newPassword
+                return user.save()
+            })
+            .then(() => true)
     }
+
+
+
 }
 
 module.exports = { logic }
