@@ -55,11 +55,34 @@ const logic = {
                 return user.save()
             })
             .then(() => true)
+    },
+
+    listUserBids(email){
+        return Promise.resolve()
+            .then(() => {
+               validate._validateEmail(email)
+
+                return User.findOne({ email }).populate('bidded')
+            })
+            .then(user => {
+                if(!user) throw new Error(`user ${email} does not exist`)
+
+                return user.bidded
+            })
+    },
+
+    listUserWishes(email){
+        return Promise.resolve()
+            .then(() => {
+               validate._validateEmail(email)
+
+                return User.findOne({ email }).populate('wishes')
+            })
+            .then(user => {
+                if(!user) throw new Error(`user ${email} does not exist`)
+                return user.wishes
+            })
     }
-
-
-
-
 
 }
 

@@ -1,7 +1,7 @@
 'use strict'
 
 const { Schema, Schema: { Types: { ObjectId } } } = require('mongoose')
-const auction = require('./auction')
+const bid = require('./bid')
 
 
 module.exports = new Schema({
@@ -27,39 +27,14 @@ module.exports = new Schema({
         required: true
     },
 
-    currentPrice: {
-        type: Number,
-        required: true
-    },
-
-    actualUser: {
-        ref: 'User',
-        type: ObjectId
-    },
-
-    currentAuction: {
-        ref: 'Auction',
-        type: ObjectId
-    },
-
     closed: Boolean,
 
     image: String,
+  
+    category: [{
+        type: String,
+        enum: ['Marvel', 'Music', 'Games', 'Technology', 'Movies']
+    }],
 
-    userWining: {
-        ref: 'User',
-        type: ObjectId
-    },
-
-    auctionWining: {
-        ref: 'Auction',
-        type: ObjectId
-    },
-
-    category: {
-        ref: 'Category',
-        type: ObjectId
-    },
-
-    auction: [auction]
+    bids: [bid]
 })

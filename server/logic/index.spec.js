@@ -5,27 +5,27 @@ require ('dotenv').config()
 const { logic } = require('.')
 const { expect } = require('chai')
 const mongoose = require('mongoose')
-const { models: {Product, User, Category, Auction} } = require('../data')
+const { models: {Product, User, Bid} } = require('../data')
 
 
 const { env: { MONGO_URL } } = process
 
 describe('logic', () => {
-    const email= 'javier@gmail.com', password = '123', role = 'customer', name = 'Javi', surname = 'Lopez', wishedList = [], products = []
     let _connection
-
-
+    
+    const email = 'javier@gmail.com', password = '123', name = 'Javi', surname = 'Lopez', role = 'client'
+    
     before(() => 
         mongoose.connect(MONGO_URL, { useNewUrlParser: true })
             .then(conn => _connection = conn)
     )
 
+
     beforeEach(() => {
         return Promise.all([Product.remove(), User.remove()])
     })
 
-
-    describe('register user', () => {
+    !true && describe('register user', () => {
         it('should register correctly', () =>
             User.findOne({ email })
                 .then(user => {
@@ -82,15 +82,15 @@ describe('logic', () => {
         )
 
         it('should fail on trying to register with a space on the start of the email', () =>
-        logic.register(' '+email, password, name, surname)
-            .catch(err => err)
-            .then(({ message }) => expect(message).to.equal('invalid email'))
+            logic.register(' '+email, password, name, surname)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid email'))
         )
 
         it('should fail on trying to register with a space on the end of the email', () =>
-        logic.register(email+' ', password, name, surname)
-            .catch(err => err)
-            .then(({ message }) => expect(message).to.equal('invalid email'))
+            logic.register(email+' ', password, name, surname)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid email'))
         )
 
         it('should fail on trying to register with an undefined password', () =>
@@ -131,9 +131,9 @@ describe('logic', () => {
 
 
         it('should fail on trying to register with an undefined name', () =>
-        logic.register(email, password, undefined, surname)
-            .catch(err => err)
-            .then(({ message }) => expect(message).to.equal('invalid name'))
+            logic.register(email, password, undefined, surname)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid name'))
         )
 
         it('should fail on trying to register with an empty name', () =>
@@ -205,8 +205,9 @@ describe('logic', () => {
 
     })
 
-    describe('login', () =>{
-        const notExistingEmail = 'jlb@gmail.com', incorrectPassword = '123456'
+    !true && describe('login', () =>{
+        const notExistingEmail = 'jlb@gmail.com', incorrectPassword = '123456', email= 'javier@gmail.com', password = '123', name = 'Javi', surname = 'Lopez'
+
 
         beforeEach(() => User.create({ email, password, name, surname }))
 
@@ -285,9 +286,9 @@ describe('logic', () => {
 
     })
 
-    describe('update password', () => {
-        const newPassword = '123456'
-        const notExistingEmail = 'jlb@gmail.com'
+    !true && describe('update password', () => {
+        const newPassword = '123456', notExistingEmail = 'jlb@gmail.com', email= 'javier@gmail.com', password = '123', name = 'Javi', surname = 'Lopez'
+
 
         beforeEach(() => User.create({ email, password, name, surname }))
 
@@ -424,6 +425,91 @@ describe('logic', () => {
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal('invalid password'))
         )
+    })
+
+    !true && describe('list user products', () => {
+        const user = new User({ email, password, role, name, surname })
+
+        const bid = new Bid({price: 500, date: new Date(), user: user._id})
+        const bid2 = new Bid({price: 690, date: new Date(), user: user._id})
+
+        const product = new Product({
+            title: 'Thanos infinity gauntlet',
+            description: 'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+            initialDate: '2018-08-27T10:18:00',
+            finalDate: '2018-08-30T10:18:00',
+            initialPrice: 800,
+            closed: false,
+            image: 'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+            category: ['Marvel'],
+            bids: [bid, bid2]
+        })
+
+        user.bidded.push(product._id)
+
+        beforeEach(() =>
+           Promise.all([
+               user.save(),
+               bid.save(),
+               product.save()
+           ])
+        )
+
+        it('should list user products correctly', () => {
+            return logic.listUserBids(email)
+                .then(products => {
+                    expect(products[0].title).to.equal('Thanos infinity gauntlet')
+                    expect(products[0].closed).to.be.false
+                    expect(products[0].initialPrice).to.equal(800)
+                })
+        })
+
+        it('should fail at showing user products of a user that does not exist', () => {
+            return logic.listUserBids(email)
+                .catch(err => err)
+                .then(({message}) => expect(message).to.equal(`user ${email} does not exist`))
+        })
+    })
+
+    !true && describe('list user wishes', () => {
+        const user = new User({ email, password, role, name, surname})
+
+        const product = new Product({
+            title: 'Thanos infinity gauntlet',
+            description: 'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+            initialDate: '2018-08-27T10:18:00',
+            finalDate: '2018-08-30T10:18:00',
+            initialPrice: 800,
+            closed: false,
+            image: 'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+            category: ['Marvel'],
+            bids: []
+        })
+
+        user.wishes.push(product._id)
+
+
+        beforeEach(() =>
+           Promise.all([
+               user.save(),
+               product.save()
+           ])
+        )
+
+        it('should list user products correctly', () => {
+            return logic.listUserWishes(email)
+                .then(products => {
+                    expect(products[0].title).to.equal('Thanos infinity gauntlet')
+                    expect(products[0].closed).to.be.false
+                    expect(products[0].initialPrice).to.equal(800)
+                })
+        })
+
+        it('should fail at showing user wishes of a user that does not exist', () => {
+            return logic.listUserWishes(email)
+                .catch(err => err)
+                .then(({message}) => expect(message).to.equal(`user ${email} does not exist`))
+        })
     })
 
     after(() => 

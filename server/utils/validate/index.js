@@ -10,6 +10,10 @@ const validate = {
         let res = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(email)
         if (!res) throw new Error('invalid email')
     },
+
+    _validateNumber(number){
+        if (typeof number !== 'number') throw Error('the value is not a number')
+    }
 }
 
  module.exports = { validate }
