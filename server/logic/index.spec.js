@@ -45,7 +45,7 @@ describe('logic', () => {
                     expect(user.name).to.equal(name)
                     expect(user.surname).to.equal(surname)
                     return User.find()
-                        })
+                })
         )
 
         it('should fail on trying to register an already registered user', () =>
