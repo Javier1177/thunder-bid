@@ -145,7 +145,59 @@ const logic = {
             })
     },
 
+    addProduct(title, description, initialDate, finalDate, initialPrice, closed, image, category, bids){
+        return Promise.resolve()
+            .then(() =>{
+                validate._validateStringField('title', title)
+                validate._validateStringField('description', description)
+                validate._validateStringField('initial date', initialDate)
+                validate._validateStringField('final date', finalDate)
+                validate._validateNumber(initialPrice)
+                validate._validateBoolean('closed', closed)
+                validate._validateStringField('image', image)
+                validate._validateStringField('category', category)
 
+
+                return Product.create({
+                    title,
+                    description,
+                    initialDate,
+                    finalDate,
+                    initialPrice,
+                    closed,
+                    image,
+                    category,
+                    bids
+                })             
+            })
+    },
+
+    //TODO
+    // addBid(productId, userId, price){
+    //     return Promise.resolve()
+    //         .then(() => {
+    //             const idProd = productId.toString()
+    //             validate._validateStringField('product id', idProd)
+    //             const idUser = userId.toString()
+    //             validate._validateStringField('user id', idUser)
+    //             validate._validateNumber('price', price)
+                
+    //             return User.findOne({ '_id' : idUser})
+    //                 .then(user => {
+    //                     if(!user) throw Error(`no user found with this id`)
+
+    //                     return Product.findOne({ '_id' : idProd})
+    //                         .then(productMatch => {
+    //                             if(!productMatch)  throw Error(`no product found with id`)
+    //                             if(productMatch.closed) throw Error('product closed')
+    //                             if(productMatch.price > price) throw Error('the price of the bid is lower')
+
+    //                             const bid = new Bid({ price, date: Date.now(), user: user._id })
+    //                             return Product.findByIdAndUpdate(idProd, { $push: {bids: bid}})
+    //                         })
+    //                 })
+    //         })
+    // }
 
 }
 

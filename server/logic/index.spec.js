@@ -629,6 +629,493 @@ describe('logic', () => {
 
     })
 
+    true && describe('create product', () => {
+        it('should create a new product', () => 
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .then(product =>{
+                    expect(product.title).to.equal('Thanos infinity gauntlet')
+                    expect(product.closed).to.be.false
+                    expect(product.initialPrice).to.equal(800)
+            })
+        )
+
+        it('should fail with a number as a title', () =>
+            logic.addProduct(
+                123,
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid title'))
+        )
+
+        it('should fail with a space as a title', () =>
+            logic.addProduct(
+                ' ',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid title'))
+        )
+
+        it('should fail with a title starting with a space', () =>
+            logic.addProduct(
+                ' thanos',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid title'))
+        )
+
+        it('should fail with a title ending with space', () =>
+            logic.addProduct(
+                'thanos ',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid title'))
+        )
+
+        it('should fail with a space as a description', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                ' ',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid description'))
+        )
+
+        it('should fail with an empty description', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                '',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid description'))
+        )
+
+        it('should fail with a description starting with space', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                ' description',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid description'))
+        )
+
+        it('should fail with a description ending with space', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'description ',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid description'))
+        )
+
+        it('should fail with a number as description', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                546,
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid description'))
+        )
+
+        it('should fail with an empty initial date', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '',
+                '2018-08-30T10:18:00',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid initial date'))
+        )
+
+        it('should fail with a space as initial date', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                ' ',
+                '2018-08-30T10:18:00',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid initial date'))
+        )
+
+        it('should fail with an initial date starting with space', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                ' 2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid initial date'))
+        )
+
+        it('should fail with an initial date endnig with space', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00 ',
+                '2018-08-30T10:18:00',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid initial date'))
+        )
+
+        it('should fail with a number as initial date', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                5,
+                '2018-08-30T10:18:00',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid initial date'))
+        )
+
+        it('should fail with a number as final date', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                30,
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid final date'))
+        )
+
+        it('should fail with a space as final date', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                ' ',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid final date'))
+        )
+
+        it('should fail with an empty final date', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                '',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid final date'))
+        )
+
+        it('should fail with an final date starting with space', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                ' 2018-08-30T10:18:00',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid final date'))
+        )
+
+        it('should fail with an final date ending with space', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00 ',
+                800,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid final date'))
+        )
+
+        it('should fail with a string as price', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                '800',
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('the value is not a number'))
+        )
+
+        it('should fail with an empty price', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                '',
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('the value is not a number'))
+        )
+
+        it('should fail with a space as a price', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                ' ',
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('the value is not a number'))
+        )
+
+        it('should fail with a string as the closed state of the product', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                500,
+                'false',
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid closed'))
+        )
+
+        it('should fail with an empty image', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                500,
+                false,
+                '',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid image'))
+        )
+
+        it('should fail with a space as image', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                500,
+                false,
+                ' ',
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid image'))
+        )
+
+        it('should fail with a number as image', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                500,
+                false,
+                500,
+                'Marvel',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid image'))
+        )
+
+        it('should fail with a number as category', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                500,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                6,
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid category'))
+        )
+
+        it('should fail with an empty category', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                500,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                '',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid category'))
+        )
+
+        it('should fail with a space as category', () =>
+            logic.addProduct(
+                'Thanos infinity gauntlet',
+                'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+                '2018-08-27T10:18:00',
+                '2018-08-30T10:18:00',
+                500,
+                false,
+                'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+                ' ',
+                []
+            )
+            .catch(err => err)
+            .then(({ message }) => expect(message).to.equal('invalid category'))
+        )
+    })
+
+
+
     after(() => 
         /*Promise.all([
             Product.deleteMany(),
