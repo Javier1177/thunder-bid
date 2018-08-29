@@ -25,7 +25,7 @@ describe('logic', () => {
         return Promise.all([Product.remove(), User.remove(), Bid.remove()])
     })
 
-    !true && describe('register user', () => {
+    true && describe('register user', () => {
         it('should register correctly', () =>
             User.findOne({ email })
                 .then(user => {
@@ -205,7 +205,7 @@ describe('logic', () => {
 
     })
 
-    !true && describe('login', () =>{
+    true && describe('login', () =>{
         const notExistingEmail = 'jlb@gmail.com', incorrectPassword = '123456', email= 'javier@gmail.com', password = '123', name = 'Javi', surname = 'Lopez'
 
 
@@ -286,7 +286,7 @@ describe('logic', () => {
 
     })
 
-    !true && describe('update password', () => {
+    true && describe('update password', () => {
         const newPassword = '123456', notExistingEmail = 'jlb@gmail.com', email= 'javier@gmail.com', password = '123', name = 'Javi', surname = 'Lopez', wrongPassword = '987'
 
 
@@ -433,7 +433,7 @@ describe('logic', () => {
     )
     })
 
-    !true && describe('list user bids', () => {
+    true && describe('list user bids', () => {
         const user = new User({ email, password, role, name, surname })
 
         const bid = new Bid({price: 500, date: new Date(), user: user._id})
@@ -462,7 +462,7 @@ describe('logic', () => {
         )
 
         it('should list user products correctly', () => {
-            return logic.listUserBids(email)
+            return logic.listUserBids(user._id)
                 .then(products => {
                     expect(products[0].title).to.equal('Thanos infinity gauntlet')
                     expect(products[0].closed).to.be.false
@@ -471,13 +471,13 @@ describe('logic', () => {
         })
 
         it('should fail at showing user products of a user that does not exist', () => {
-            return logic.listUserBids(email)
+            return logic.listUserBids(user._id)
                 .catch(err => err)
-                .then(({message}) => expect(message).to.equal(`user ${email} does not exist`))
+                .then(({message}) => expect(message).to.equal(`user does not exist`))
         })
     })
 
-    !true && describe('list user wishes', () => {
+    true && describe('list user wishes', () => {
         const user = new User({ email, password, role, name, surname})
 
         const product = new Product({
@@ -503,22 +503,17 @@ describe('logic', () => {
         )
 
         it('should list user products correctly', () => {
-            return logic.listUserWishes(email)
+            return logic.listUserWishes(user._id)
                 .then(products => {
+                    debugger
                     expect(products[0].title).to.equal('Thanos infinity gauntlet')
                     expect(products[0].closed).to.be.false
                     expect(products[0].initialPrice).to.equal(800)
                 })
         })
-
-        it('should fail at showing user wishes of a user that does not exist', () => {
-            return logic.listUserWishes(email)
-                .catch(err => err)
-                .then(({message}) => expect(message).to.equal(`user ${email} does not exist`))
-        })
     })
 
-    !true && describe('list all products', () => {
+    true && describe('list all products', () => {
         const product = new Product({
             title: 'Thanos infinity gauntlet',
             description: 'Original gauntlet used on the movie infinity war, whit all the infinit stones',
@@ -570,7 +565,7 @@ describe('logic', () => {
     )
     })
 
-    !true && describe('retrieve product', () => {
+    true && describe('retrieve product', () => {
         const product = new Product({
             title: 'Thanos infinity gauntlet',
             description: 'Original gauntlet used on the movie infinity war, whit all the infinit stones',
@@ -606,7 +601,7 @@ describe('logic', () => {
 
     })
 
-    !true && describe('retrieve user', () => {
+    true && describe('retrieve user', () => {
         const user = new User({ email, password, role, name, surname })
 
         beforeEach(() =>

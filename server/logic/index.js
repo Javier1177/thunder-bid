@@ -57,29 +57,32 @@ const logic = {
             .then(() => true)
     },
 
-    listUserBids(email){
+    listUserBids(userId){
         return Promise.resolve()
             .then(() => {
-               validate._validateEmail(email)
+                const id = userId.toString()
+                validate._validateStringField('id user', id)
 
-                return User.findOne({ email }).populate('bidded')
+                return User.findOne({ '_id': id }).populate('bidded')
             })
             .then(user => {
-                if(!user) throw new Error(`user ${email} does not exist`)
+                if(!user) throw new Error(`user does not exist`)
 
                 return user.bidded
             })
     },
 
-    listUserWishes(email){
+    listUserWishes(userId){
         return Promise.resolve()
             .then(() => {
-               validate._validateEmail(email)
+                const id = userId.toString()
+                validate._validateStringField('id user', id)
 
-                return User.findOne({ email }).populate('wishes')
+                return User.findOne({ '_id': id }).populate('wishes')
             })
             .then(user => {
-                if(!user) throw new Error(`user ${email} does not exist`)
+                if(!user) throw new Error(`user does not exist`)
+                debugger
                 return user.wishes
             })
     },
@@ -124,7 +127,6 @@ const logic = {
             })
             .then(product => {
                 if(!product) throw new Error('product does not exist')
-
                 return product
             })
     },
@@ -141,7 +143,9 @@ const logic = {
                 if(!user) throw new Error('user does not exist')
                 return user
             })
-    }
+    },
+
+
 
 }
 
