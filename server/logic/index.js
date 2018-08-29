@@ -127,6 +127,20 @@ const logic = {
 
                 return product
             })
+    },
+
+    retrieveUser(idUser){
+        return Promise.resolve()
+            .then(() => {
+                const id = idUser.toString()
+                validate._validateStringField('user id', id)
+
+                return User.find({ '_id': id})
+            })
+            .then(user => {
+                if(!user) throw new Error('user does not exist')
+                return user
+            })
     }
 
 }

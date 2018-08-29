@@ -606,7 +606,33 @@ describe('logic', () => {
 
     })
 
-    
+    !true && describe('retrieve user', () => {
+        const user = new User({ email, password, role, name, surname })
+
+        beforeEach(() =>
+           Promise.resolve()
+               .then(() => user.save())
+        )
+
+        it('should succeed on correct data', () => 
+            logic.retrieveUser(user._id)
+                .then(user => {
+                    expect(user[0].email).to.equal(email)
+                    expect(user[0].password).to.equal(password)
+                    expect(user[0].name).to.equal(name)
+                    expect(user[0].surname).to.equal(surname)
+                    expect(user[0].role).to.equal(role)
+                })
+        )
+
+        it('should fail on space as id user', () => 
+            logic.retrieveUser(' ')
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid user id'))
+        )
+
+
+    })
 
     after(() => 
         /*Promise.all([
