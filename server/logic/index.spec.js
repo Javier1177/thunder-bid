@@ -22,7 +22,7 @@ describe('logic', () => {
 
 
     beforeEach(() => {
-        return Promise.all([Product.remove(), User.remove()])
+        return Promise.all([Product.remove(), User.remove(), Bid.remove()])
     })
 
     !true && describe('register user', () => {
@@ -433,7 +433,7 @@ describe('logic', () => {
     )
     })
 
-    !true && describe('list user products', () => {
+    !true && describe('list user bids', () => {
         const user = new User({ email, password, role, name, surname })
 
         const bid = new Bid({price: 500, date: new Date(), user: user._id})
@@ -447,7 +447,7 @@ describe('logic', () => {
             initialPrice: 800,
             closed: false,
             image: 'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
-            category: ['Marvel'],
+            category: 'Marvel',
             bids: [bid, bid2]
         })
 
@@ -488,7 +488,7 @@ describe('logic', () => {
             initialPrice: 800,
             closed: false,
             image: 'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
-            category: ['Marvel'],
+            category: 'Marvel',
             bids: []
         })
 
@@ -518,12 +518,102 @@ describe('logic', () => {
         })
     })
 
+    !true && describe('list all products', () => {
+        const product = new Product({
+            title: 'Thanos infinity gauntlet',
+            description: 'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+            initialDate: '2018-08-27T10:18:00',
+            finalDate: '2018-08-30T10:18:00',
+            initialPrice: 800,
+            closed: false,
+            image: 'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+            category: 'Marvel',
+            bids: []
+        })
+
+        beforeEach(() =>
+           Promise.resolve()
+               .then(() => product.save())
+        )
+        
+        it('should succeed on correct data', () => 
+            logic.listProducts('thanos', 'Marvel')
+                .then(products => {
+                    expect(products[0].title).to.equal('Thanos infinity gauntlet')
+                    expect(products[0].closed).to.be.false
+                    expect(products[0].initialPrice).to.equal(800)
+                })
+        )
+
+        it('should fail on space as a query', () =>
+            logic.listProducts(' ')
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid query'))
+        )
+
+        it('should fail on a query starting with a space', () =>
+            logic.listProducts(' thanos')
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid query'))
+        )
+
+        it('should fail on a query that does not exist', () =>
+            logic.listProducts('almendruco')
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('products not found'))
+        )
+
+        it('should fail on a category without products', () =>
+            logic.listProducts(undefined, 'Music')
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('products not found'))
+    )
+    })
+
+    !true && describe('retrieve product', () => {
+        const product = new Product({
+            title: 'Thanos infinity gauntlet',
+            description: 'Original gauntlet used on the movie infinity war, whit all the infinit stones',
+            initialDate: '2018-08-27T10:18:00',
+            finalDate: '2018-08-30T10:18:00',
+            initialPrice: 800,
+            closed: false,
+            image: 'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+            category: 'Marvel',
+            bids: []
+        })
+
+        beforeEach(() =>
+           Promise.resolve()
+               .then(() => product.save())
+        )
+
+        it('should succeed on correct data', () => 
+            logic.retrieveProduct(product._id)
+                .then(products => {
+                    expect(products[0].title).to.equal('Thanos infinity gauntlet')
+                    expect(products[0].closed).to.be.false
+                    expect(products[0].initialPrice).to.equal(800)
+                })
+        )
+
+        it('should fail on space as id', () => 
+            logic.retrieveProduct(' ')
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('invalid product id'))
+        )
+
+
+    })
+
+    
+
     after(() => 
-        Promise.all([
+        /*Promise.all([
             Product.deleteMany(),
             User.deleteMany()
         ])
-        .then(() => _connection.disconnect())
+        .then(() =>*/ _connection.disconnect()//)
     )
 
 })

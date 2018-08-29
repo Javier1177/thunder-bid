@@ -1,4 +1,4 @@
-const { Product, User, Category, Auction} = require('../data/models')
+const { Product, User, Bid} = require('../data/models')
 const { validate } = require('../utils/validate')
 
 const logic = {
@@ -81,6 +81,51 @@ const logic = {
             .then(user => {
                 if(!user) throw new Error(`user ${email} does not exist`)
                 return user.wishes
+            })
+    },
+
+    listProducts(query, category){
+        return Promise.resolve()
+            .then(() => {
+                let filter = {}
+
+                if(query){
+                    validate._validateQueryString('query', query)
+
+                    filter.title =  {
+                        $regex: query,
+                        $options: 'i'
+                    }
+                }
+                if(category){
+                    validate._validateStringField('category', category)
+                    filter.category = category
+                } 
+
+                return Product.find(filter, { __v: 0, _id: 0}, {
+                    sort: {
+                        finalDate: 1
+                    }
+                })
+                .then(products => {
+                    if(!products.length) throw new Error(`products not found`)
+                    return products
+                })
+            })
+    },
+
+    retrieveProduct(productId){
+        return Promise.resolve()
+            .then(() =>{
+                const id = productId.toString()
+                validate._validateStringField('product id', id)
+
+                return Product.find({ '_id': id })
+            })
+            .then(product => {
+                if(!product) throw new Error('product does not exist')
+
+                return product
             })
     }
 

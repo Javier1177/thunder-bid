@@ -31,10 +31,10 @@ module.exports = new Schema({
 
     image: String,
   
-    category: [{
+    category: {
         type: String,
         enum: ['Marvel', 'Music', 'Games', 'Technology', 'Movies']
-    }],
+    },
 
     bids: [bid]
 })
