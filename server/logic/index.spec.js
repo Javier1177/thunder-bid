@@ -25,7 +25,7 @@ describe('logic', () => {
         return Promise.all([Product.remove(), User.remove(), Bid.remove()])
     })
 
-    !true && describe('register user', () => {
+    true && describe('register user', () => {
         it('should register correctly', () =>
             User.findOne({ email })
                 .then(user => {
@@ -205,7 +205,7 @@ describe('logic', () => {
 
     })
 
-    !true && describe('authenticate', () =>{
+    true && describe('authenticate', () =>{
         const notExistingEmail = 'jlb@gmail.com', incorrectPassword = '123456', email= 'javier@gmail.com', password = '123', name = 'Javi', surname = 'Lopez'
 
 
@@ -286,7 +286,7 @@ describe('logic', () => {
 
     })
 
-    !true && describe('update password', () => {
+    true && describe('update password', () => {
         const newPassword = '123456', notExistingEmail = 'jlb@gmail.com', email= 'javier@gmail.com', password = '123', name = 'Javi', surname = 'Lopez', wrongPassword = '987'
 
 
@@ -433,7 +433,7 @@ describe('logic', () => {
     )
     })
 
-    !true && describe('list user bids', () => {
+    true && describe('list user bids', () => {
         const user = new User({ email, password, role, name, surname })
 
         const bid = new Bid({price: 500, date: new Date(), user: user._id})
@@ -477,7 +477,7 @@ describe('logic', () => {
         })
     })
 
-    !true && describe('list user wishes', () => {
+    true && describe('list user wishes', () => {
         const user = new User({ email, password, role, name, surname})
 
         const product = new Product({
@@ -513,7 +513,7 @@ describe('logic', () => {
         })
     })
 
-    !true && describe('list all products', () => {
+    true && describe('list all products', () => {
         const product = new Product({
             title: 'Thanos infinity gauntlet',
             description: 'Original gauntlet used on the movie infinity war, whit all the infinit stones',
@@ -565,7 +565,7 @@ describe('logic', () => {
     )
     })
 
-    !true && describe('retrieve product', () => {
+    true && describe('retrieve product', () => {
         const product = new Product({
             title: 'Thanos infinity gauntlet',
             description: 'Original gauntlet used on the movie infinity war, whit all the infinit stones',
@@ -601,7 +601,7 @@ describe('logic', () => {
 
     })
 
-    !true && describe('retrieve user', () => {
+    true && describe('retrieve user', () => {
         const user = new User({ email, password, role, name, surname })
 
         beforeEach(() =>
@@ -629,7 +629,7 @@ describe('logic', () => {
 
     })
 
-    !true && describe('create product', () => {
+    true && describe('create product', () => {
         it('should create a new product', () => 
             logic.addProduct(
                 'Thanos infinity gauntlet',
@@ -1114,7 +1114,7 @@ describe('logic', () => {
         )
     })
 
-    !true && describe('add bid', () => {
+    true && describe('add bid', () => {
 
         const user = new User({ email, password, role, name, surname })
         const bid = new Bid({price: 900, date: new Date(), user: user._id})

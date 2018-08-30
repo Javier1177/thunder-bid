@@ -26,4 +26,51 @@ router.post('/register', jsonBodyParser, (req, res) => {
         })
 })
 
+//TODO
+router.post('/login', jsonBodyParser, (req, res) => {
+    const { body: { email, password } } = req
+
+    logic.authenticate(email, password)
+        .then(({ _id }) => {
+            const { TOKEN_SECRET, TOKEN_EXP } = process.env
+
+            const token = jwt.sign({ sub: _id }, TOKEN_SECRET, { expiresIn: TOKEN_EXP })
+
+            res.json({ message: 'user authenticated', token, id: _id})
+        })
+        .catch(err => {
+            const { message } = err
+
+            res.status(err instanceof Error ? 401 : 500).json({ message })
+        })
+})
+
+router.get('/product/:productId',  (req, res) =>{
+    const { params: { productId} } = req
+
+    return logic.retrieveProduct(productId)
+        .then(product => {
+            res.status(200).json({ data: product})
+        })
+        .catch(err => {
+            const { message } = err
+
+            res.status(err instanceof Error ? 400 : 500).json({ message })
+        })
+})
+
+router.get('/product/user/:userId', (req, res) => {
+    const { params: { userId } } = req
+
+    return logic.listUserProducts(userId)
+        .then(products => {
+            res.status(200).json({ status: 'OK', data: products })
+        })
+        .catch(err => {
+            const { message } = err
+
+            res.status(err instanceof Error ? 400 : 500).json({ message })
+        })
+})
+
 module.exports = router

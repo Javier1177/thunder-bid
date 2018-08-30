@@ -33,7 +33,7 @@ const logic = {
                 if(!user) throw new Error(`${email} does not exists`)
                 if (user.password !== password) throw new Error('wrong password')
 
-                return true
+                return user
             })
     },
 
@@ -125,7 +125,7 @@ const logic = {
                 return Product.find({ '_id': id })
             })
             .then(product => {
-                if(!product) throw new Error('product does not exist')
+                if(!product.length) throw new Error('product does not exist')
                 return product
             })
     },
@@ -193,6 +193,7 @@ const logic = {
 
                                 const bid = new Bid({ price, date: Date.now(), user: user._id })
                                 Product.findByIdAndUpdate(idProd, { $push: {bids: bid}})
+                                //Not working
                                 User.findOneAndUpdate(idUser, { $push: {bidded: bid._id}})
                             })
                             .then(res => res)
