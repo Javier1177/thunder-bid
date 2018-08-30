@@ -3,7 +3,7 @@ require('dotenv').config()
 const mongoose = require('mongoose')
 const express = require('express')
 const cors = require('cors')
-const package = require('./package.json')
+const package = require('../package.json')
 const routes = require('./routes')
 
 const {env: {MONGO_URL} } = process
@@ -11,7 +11,6 @@ const {env: {MONGO_URL} } = process
 mongoose.connect(MONGO_URL, { useNewUrlParser: true })
     .then(() => {
         const { PORT } = process.env
-        
         const app = express()
         const http = require('http').Server(app)
         const io = require('socket.io')(http)

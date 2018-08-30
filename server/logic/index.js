@@ -82,7 +82,6 @@ const logic = {
             })
             .then(user => {
                 if(!user) throw new Error(`user does not exist`)
-                debugger
                 return user.wishes
             })
     },
@@ -173,31 +172,33 @@ const logic = {
     },
 
     //TODO
-    // addBid(productId, userId, price){
-    //     return Promise.resolve()
-    //         .then(() => {
-    //             const idProd = productId.toString()
-    //             validate._validateStringField('product id', idProd)
-    //             const idUser = userId.toString()
-    //             validate._validateStringField('user id', idUser)
-    //             validate._validateNumber('price', price)
+    addBid(productId, userId, price){
+        return Promise.resolve()
+            .then(() => {
+                const idProd = productId.toString()
+                validate._validateStringField('product id', idProd)
+                const idUser = userId.toString()
+                validate._validateStringField('user id', idUser)
+                validate._validateNumber(price)
                 
-    //             return User.findOne({ '_id' : idUser})
-    //                 .then(user => {
-    //                     if(!user) throw Error(`no user found with this id`)
+                return User.findOne({ '_id' : idUser})
+                    .then(user => {
+                        if(!user) throw Error(`no user found with this id`)
 
-    //                     return Product.findOne({ '_id' : idProd})
-    //                         .then(productMatch => {
-    //                             if(!productMatch)  throw Error(`no product found with id`)
-    //                             if(productMatch.closed) throw Error('product closed')
-    //                             if(productMatch.price > price) throw Error('the price of the bid is lower')
+                        return Product.findOne({ '_id' : idProd})
+                            .then(productMatch => {
+                                if(!productMatch)  throw Error(`no product found with id`)
+                                if(productMatch.closed) throw Error('product closed')
+                                if(productMatch.price > price) throw Error('the price of the bid is lower')
 
-    //                             const bid = new Bid({ price, date: Date.now(), user: user._id })
-    //                             return Product.findByIdAndUpdate(idProd, { $push: {bids: bid}})
-    //                         })
-    //                 })
-    //         })
-    // }
+                                const bid = new Bid({ price, date: Date.now(), user: user._id })
+                                Product.findByIdAndUpdate(idProd, { $push: {bids: bid}})
+                                User.findOneAndUpdate(idUser, { $push: {bidded: bid._id}})
+                            })
+                            .then(res => res)
+                    })
+            })
+    }
 
 }
 
