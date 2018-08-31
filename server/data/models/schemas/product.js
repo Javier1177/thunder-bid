@@ -3,7 +3,6 @@
 const { Schema, Schema: { Types: { ObjectId } } } = require('mongoose')
 const bid = require('./bid')
 
-
 module.exports = new Schema({
     title: {
         type: String,

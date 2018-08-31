@@ -26,7 +26,6 @@ router.post('/register', jsonBodyParser, (req, res) => {
         })
 })
 
-//TODO
 router.post('/login', jsonBodyParser, (req, res) => {
     const { body: { email, password } } = req
 
@@ -45,6 +44,7 @@ router.post('/login', jsonBodyParser, (req, res) => {
         })
 })
 
+//Show product by id
 router.get('/product/:productId',  (req, res) =>{
     const { params: { productId} } = req
 
@@ -59,10 +59,43 @@ router.get('/product/:productId',  (req, res) =>{
         })
 })
 
-router.get('/product/user/:userId', (req, res) => {
+//Show user by id
+router.get('/user/:userId',  (req, res) =>{
+    const { params: { userId} } = req
+
+    return logic.retrieveUser(userId)
+        .then(user => {
+            res.status(200).json({ data: user})
+        })
+        .catch(err => {
+            const { message } = err
+
+            res.status(err instanceof Error ? 400 : 500).json({ message })
+        })
+})
+
+//Show bidded products of a user
+//JWT NOT WORKING
+router.get('/user/bidded/:userId', validateJwt, (req, res) => {
     const { params: { userId } } = req
 
-    return logic.listUserProducts(userId)
+    return logic.listUserBiddedProducts(userId)
+        .then(products => {
+            res.status(200).json({ status: 'OK', data: products })
+        })
+        .catch(err => {
+            const { message } = err
+
+            res.status(err instanceof Error ? 400 : 500).json({ message })
+        })
+})
+
+//Show wished products of a user
+//JWT NOT WORKING
+router.get('/user/wishes/:userId', validateJwt, (req, res) => {
+    const { params: { userId } } = req
+
+    return logic.listUserWishes(userId)
         .then(products => {
             res.status(200).json({ status: 'OK', data: products })
         })

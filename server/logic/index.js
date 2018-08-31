@@ -37,36 +37,16 @@ const logic = {
             })
     },
 
-    updatePassword(email, password, newPassword){
+    listUserBiddedProducts(userId){
         return Promise.resolve()
             .then(() => {
-                validate._validateEmail(email)
-                validate._validateStringField('password', password)
-                validate._validateStringField('new password', newPassword)
+                validate._validateStringField('id user', userId)
 
-                return User.findOne({ email })
-            })
-            .then(user => {
-                if(!user) throw new Error(`${email} does not exists`)
-                if (user.password !== password) throw new Error('wrong password')   
-                if(user.password === newPassword) throw new Error('new password must be different')
-
-                user.password = newPassword
-                return user.save()
-            })
-            .then(() => true)
-    },
-
-    listUserBids(userId){
-        return Promise.resolve()
-            .then(() => {
-                const id = userId.toString()
-                validate._validateStringField('id user', id)
-
-                return User.findOne({ '_id': id }).populate('bidded')
+                return User.findOne({ '_id': userId }).populate('bidded')
             })
             .then(user => {
                 if(!user) throw new Error(`user does not exist`)
+                if(!user.bidded.length) throw new Error('this user did not make any bid')
 
                 return user.bidded
             })
@@ -75,10 +55,9 @@ const logic = {
     listUserWishes(userId){
         return Promise.resolve()
             .then(() => {
-                const id = userId.toString()
-                validate._validateStringField('id user', id)
+                validate._validateStringField('id user', userId)
 
-                return User.findOne({ '_id': id }).populate('wishes')
+                return User.findOne({ '_id': userId }).populate('wishes')
             })
             .then(user => {
                 if(!user) throw new Error(`user does not exist`)
@@ -119,55 +98,33 @@ const logic = {
     retrieveProduct(productId){
         return Promise.resolve()
             .then(() =>{
-                const id = productId.toString()
-                validate._validateStringField('product id', id)
+                validate._validateStringField('product id', productId)
 
-                return Product.find({ '_id': id })
+                return Product.findOne({ '_id': productId })
             })
             .then(product => {
-                if(!product.length) throw new Error('product does not exist')
+                if(!product) throw new Error('product does not exist')
+
+                delete product._id
+
                 return product
             })
     },
 
+    //TODO ID to string
     retrieveUser(idUser){
         return Promise.resolve()
             .then(() => {
-                const id = idUser.toString()
-                validate._validateStringField('user id', id)
-
-                return User.find({ '_id': id})
+                validate._validateStringField('user id', idUser)
+            
+                return User.findOne({ '_id': idUser}, { __v: 0, _id: 0})
             })
             .then(user => {
                 if(!user) throw new Error('user does not exist')
+
+                delete user._id
+
                 return user
-            })
-    },
-
-    addProduct(title, description, initialDate, finalDate, initialPrice, closed, image, category, bids){
-        return Promise.resolve()
-            .then(() =>{
-                validate._validateStringField('title', title)
-                validate._validateStringField('description', description)
-                validate._validateStringField('initial date', initialDate)
-                validate._validateStringField('final date', finalDate)
-                validate._validateNumber(initialPrice)
-                validate._validateBoolean('closed', closed)
-                validate._validateStringField('image', image)
-                validate._validateStringField('category', category)
-
-
-                return Product.create({
-                    title,
-                    description,
-                    initialDate,
-                    finalDate,
-                    initialPrice,
-                    closed,
-                    image,
-                    category,
-                    bids
-                })             
             })
     },
 
@@ -175,28 +132,29 @@ const logic = {
     addBid(productId, userId, price){
         return Promise.resolve()
             .then(() => {
-                const idProd = productId.toString()
-                validate._validateStringField('product id', idProd)
-                const idUser = userId.toString()
-                validate._validateStringField('user id', idUser)
+                validate._validateStringField('product id', productId)
+                validate._validateStringField('user id', userId)
                 validate._validateNumber(price)
-                
-                return User.findOne({ '_id' : idUser})
+                debugger
+                return User.findOne({ '_id' : userId})
                     .then(user => {
                         if(!user) throw Error(`no user found with this id`)
 
-                        return Product.findOne({ '_id' : idProd})
+                        return Product.findOne({ '_id' : productId})
                             .then(productMatch => {
                                 if(!productMatch)  throw Error(`no product found with id`)
                                 if(productMatch.closed) throw Error('product closed')
-                                if(productMatch.price > price) throw Error('the price of the bid is lower')
+                                let minPrice
+                                if(productMatch.bids.length) minPirce = productMatch.bids[productMatch.bids.length - 1]
+                                minPrice = productMatch.initialPrice
+                                debugger
+                                if(minPrice > price) throw Error('the price of the bid is lower')
 
                                 const bid = new Bid({ price, date: Date.now(), user: user._id })
-                                Product.findByIdAndUpdate(idProd, { $push: {bids: bid}})
+                                //Product.findByIdAndUpdate(productId, { $push: {bids: bid}})
                                 //Not working
-                                User.findOneAndUpdate(idUser, { $push: {bidded: bid._id}})
+                                User.findOneAndUpdate(userId, { $push: {bidded: bid._id}})
                             })
-                            .then(res => res)
                     })
             })
     }
