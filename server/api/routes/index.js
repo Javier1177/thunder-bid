@@ -31,9 +31,9 @@ router.post('/login', jsonBodyParser, (req, res) => {
 
     logic.authenticate(email, password)
         .then(({ _id }) => {
-            const { TOKEN_SECRET, TOKEN_EXP } = process.env
+            const { JWT_SECRET, JWT_EXP } = process.env
 
-            const token = jwt.sign({ sub: _id }, TOKEN_SECRET, { expiresIn: TOKEN_EXP })
+            const token = jwt.sign({ sub: _id }, JWT_SECRET, { expiresIn: JWT_EXP })
 
             res.json({ message: 'user authenticated', token, id: _id})
         })
@@ -75,13 +75,12 @@ router.get('/user/:userId',  (req, res) =>{
 })
 
 //Show bidded products of a user
-//JWT NOT WORKING
 router.get('/user/bidded/:userId', validateJwt, (req, res) => {
     const { params: { userId } } = req
 
     return logic.listUserBiddedProducts(userId)
         .then(products => {
-            res.status(200).json({ status: 'OK', data: products })
+            res.status(200).json({ data: products })
         })
         .catch(err => {
             const { message } = err
@@ -91,13 +90,12 @@ router.get('/user/bidded/:userId', validateJwt, (req, res) => {
 })
 
 //Show wished products of a user
-//JWT NOT WORKING
 router.get('/user/wishes/:userId', validateJwt, (req, res) => {
     const { params: { userId } } = req
 
-    return logic.listUserWishes(userId)
+    logic.listUserWishes(userId)
         .then(products => {
-            res.status(200).json({ status: 'OK', data: products })
+            res.status(200).json({ data: products })
         })
         .catch(err => {
             const { message } = err
@@ -105,5 +103,23 @@ router.get('/user/wishes/:userId', validateJwt, (req, res) => {
             res.status(err instanceof Error ? 400 : 500).json({ message })
         })
 })
+
+//Add a bid
+router.post('/product/:productId/bid/:userId', [jwtValidator, jsonBodyParser], (req, res) => {
+    const { params: { productId, userId }, body: { price } } = req
+
+    logic.addBid(productId, userId, price)
+        .then(id => {
+            req.app.io.emit('newBid', productId)
+            res.status(201).json({ data: { id } })
+        })
+        .catch(err => {
+            const { message } = err
+            
+            res.status(err instanceof Error ? 400 : 500).json({ message })
+        })
+})
+
+
 
 module.exports = router

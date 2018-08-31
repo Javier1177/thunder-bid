@@ -61,6 +61,8 @@ const logic = {
             })
             .then(user => {
                 if(!user) throw new Error(`user does not exist`)
+                if(!user.wishes.length) throw new Error('this user did not add any wish')
+                
                 return user.wishes
             })
     },
@@ -127,14 +129,45 @@ const logic = {
             })
     },
 
-    //TODO
     addBid(productId, userId, price){
         return Promise.resolve()
             .then(() => {
                 validate._validateStringField('product id', productId)
                 validate._validateStringField('user id', userId)
                 validate._validateNumber(price)
-                debugger
+                return User.findOne({ '_id' : userId})
+                    .then(user => {
+                        if(!user) throw Error(`no user found with this id`)
+
+                        return Product.findOne({ '_id' : productId})
+                            .then(productMatch => {   
+                                if(!productMatch)  throw Error(`no product found with id`)
+                                if(productMatch.closed) throw Error('product closed')
+                                let minPrice
+                                if(productMatch.bids.length) minPrice = productMatch.bids[productMatch.bids.length - 1].price
+                                else minPrice = productMatch.initialPrice
+                                if(minPrice > price) throw Error('the price of the bid is lower')
+    
+                                const bid = new Bid({ price, date: Date.now(), user: userId })
+
+                                return Product.findByIdAndUpdate(productId, { $push: {bids: bid}})
+                                    .then(() => {
+                                        user.bidded.push(bid._id)
+                                        return user.save()
+                                    })
+                            })
+                            .then(() => true)
+                    })
+            })
+    },
+
+    //TODO
+    addWish(productId, userId){
+        return Promise.resolve()
+            .then(() => {
+                validate._validateStringField('product id', productId)
+                validate._validateStringField('user id', userId)
+
                 return User.findOne({ '_id' : userId})
                     .then(user => {
                         if(!user) throw Error(`no user found with this id`)
@@ -143,21 +176,12 @@ const logic = {
                             .then(productMatch => {
                                 if(!productMatch)  throw Error(`no product found with id`)
                                 if(productMatch.closed) throw Error('product closed')
-                                let minPrice
-                                if(productMatch.bids.length) minPirce = productMatch.bids[productMatch.bids.length - 1]
-                                minPrice = productMatch.initialPrice
-                                debugger
-                                if(minPrice > price) throw Error('the price of the bid is lower')
-
-                                const bid = new Bid({ price, date: Date.now(), user: user._id })
-                                //Product.findByIdAndUpdate(productId, { $push: {bids: bid}})
-                                //Not working
-                                User.findOneAndUpdate(userId, { $push: {bidded: bid._id}})
                             })
-                    })
+                        })
             })
     }
 
 }
+
 
 module.exports = { logic }
