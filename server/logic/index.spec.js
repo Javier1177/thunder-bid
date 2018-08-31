@@ -347,7 +347,7 @@ describe('logic', () => {
         })
     })
 
-    true && describe('list user wishes', () => {
+    !true && describe('list user wishes', () => {
         const user = new User({ email, password, role, name, surname })
 
         const product = new Product({

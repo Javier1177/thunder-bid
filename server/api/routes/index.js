@@ -105,13 +105,12 @@ router.get('/user/wishes/:userId', validateJwt, (req, res) => {
 })
 
 //Add a bid
-router.post('/product/:productId/bid/:userId', [jwtValidator, jsonBodyParser], (req, res) => {
+router.post('/product/:productId/bid/:userId', [validateJwt, jsonBodyParser], (req, res) => {
     const { params: { productId, userId }, body: { price } } = req
 
     logic.addBid(productId, userId, price)
-        .then(id => {
-            req.app.io.emit('newBid', productId)
-            res.status(201).json({ data: { id } })
+        .then(() => {
+            res.status(201).json({ message : 'Bid added correctly' })
         })
         .catch(err => {
             const { message } = err
