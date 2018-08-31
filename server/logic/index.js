@@ -111,7 +111,6 @@ const logic = {
             })
     },
 
-    //TODO ID to string
     retrieveUser(idUser){
         return Promise.resolve()
             .then(() => {
