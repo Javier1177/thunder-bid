@@ -138,7 +138,7 @@ const logic = {
                 return User.findOne({ '_id' : userId})
                     .then(user => {
                         if(!user) throw Error(`no user found with this id`)
-
+                        
                         return Product.findOne({ '_id' : productId})
                             .then(productMatch => {   
                                 if(!productMatch)  throw Error(`no product found with id`)
@@ -146,7 +146,7 @@ const logic = {
                                 let minPrice
                                 if(productMatch.bids.length) minPrice = productMatch.bids[productMatch.bids.length - 1].price
                                 else minPrice = productMatch.initialPrice
-                                if(minPrice > price) throw Error('the price of the bid is lower')
+                                if(minPrice >= price) throw Error('the price of the bid should be higher than the current price')
     
                                 const bid = new Bid({ price, date: Date.now(), user: userId })
 
@@ -161,7 +161,6 @@ const logic = {
             })
     },
 
-    //TODO
     addWish(productId, userId){
         return Promise.resolve()
             .then(() => {
@@ -176,7 +175,35 @@ const logic = {
                             .then(productMatch => {
                                 if(!productMatch)  throw Error(`no product found with id`)
                                 if(productMatch.closed) throw Error('product closed')
+                                if(user.wishes.indexOf(productMatch._id) != -1) throw Error('you cannot add a product twice to de wish list')
+                                user.wishes.push(productMatch._id)
+                                return user.save()
                             })
+                            .then(() => true)
+                        })
+            })
+    },
+
+    deleteWish(productId, userId){
+        return Promise.resolve()
+            .then(() => {
+                validate._validateStringField('product id', productId)
+                validate._validateStringField('user id', userId)
+
+                return User.findOne({ '_id' : userId})
+                    .then(user => {
+                        if(!user) throw Error(`no user found with this id`)
+
+                        return Product.findOne({ '_id' : productId})
+                            .then(productMatch => {
+                                if(!productMatch)  throw Error(`no product found with id`)
+                                if(productMatch.closed) throw Error('product closed')
+                                if(user.wishes.indexOf(productMatch._id) != 1) throw Error('you cannot delete a product that is not in your wish list')
+                                let idPosition = user.wishes.push(user.wishes.indexOf(productMatch._id))
+                                user.wishes.splice(idPosition,1)
+                                return user.save()
+                            })
+                            .then(() => true)
                         })
             })
     }

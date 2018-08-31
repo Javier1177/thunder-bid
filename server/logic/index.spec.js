@@ -25,7 +25,7 @@ describe('logic', () => {
         return Promise.all([Product.remove(), User.remove(), Bid.remove()])
     })
 
-    !true && describe('register user', () => {
+    true && describe('register user', () => {
         it('should register correctly', () =>
             User.findOne({ email })
                 .then(user => {
@@ -205,7 +205,7 @@ describe('logic', () => {
 
     })
 
-    !true && describe('authenticate', () => {
+    true && describe('authenticate', () => {
         const notExistingEmail = 'jlb@gmail.com', incorrectPassword = '123456', email = 'javier@gmail.com', password = '123', name = 'Javi', surname = 'Lopez'
 
 
@@ -288,7 +288,7 @@ describe('logic', () => {
 
     })
 
-    !true && describe('list user bids', () => {
+    true && describe('list user bids', () => {
         const user = new User({ email, password, role, name, surname })
 
         const bid = new Bid({ price: 500, date: new Date(), user: user._id })
@@ -347,7 +347,7 @@ describe('logic', () => {
         })
     })
 
-    !true && describe('list user wishes', () => {
+    true && describe('list user wishes', () => {
         const user = new User({ email, password, role, name, surname })
 
         const product = new Product({
@@ -383,7 +383,7 @@ describe('logic', () => {
         })
     })
 
-    !true && describe('list all products', () => {
+    true && describe('list all products', () => {
         const product = new Product({
             title: 'Thanos infinity gauntlet',
             description: 'Original gauntlet used on the movie infinity war, with all the infinite stones',
@@ -435,7 +435,7 @@ describe('logic', () => {
         )
     })
 
-    !true && describe('retrieve product', () => {
+    true && describe('retrieve product', () => {
         const product = new Product({
             title: 'Thanos infinity gauntlet',
             description: 'Original gauntlet used on the movie infinity war, with all the infinite stones',
@@ -472,7 +472,7 @@ describe('logic', () => {
 
     })
 
-    !true && describe('retrieve user', () => {
+    true && describe('retrieve user', () => {
         const user = new User({ email, password, role, name, surname })
 
         beforeEach(() =>
@@ -501,8 +501,7 @@ describe('logic', () => {
 
     })
 
-    //It doesn't work in the last test
-    !true && describe('add bid', () => {
+    true && describe('add bid', () => {
 
         const user = new User({ email, password, role, name, surname })
         const bid = new Bid({ price: 900, date: new Date(), user: user._id })
@@ -531,8 +530,7 @@ describe('logic', () => {
                 bid.save(),
                 product.save()
             ])
-        }
-        )
+        })
         
 
         it('should add a bid', () => {
@@ -561,7 +559,7 @@ describe('logic', () => {
         it('should fail with a lower price', () => {
             return logic.addBid(idProduct, idUser, 100)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal('the price of the bid is lower'))
+                .then(({ message }) => expect(message).to.equal('the price of the bid should be higher than the current price'))
 
         })
 
@@ -570,6 +568,62 @@ describe('logic', () => {
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal('the value is not a number'))
 
+        })
+
+        it('should fail with bidding with the same current price', () => {
+            return logic.addBid(idProduct, idUser, 900)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('the price of the bid should be higher than the current price'))
+
+        })
+    })
+
+    true && describe('add wish', () => {
+        const user = new User({ email, password, role, name, surname })
+        const product = new Product({
+            title: 'Thanos infinity gauntlet',
+            description: 'Original gauntlet used on the movie infinity war, with all the infinite stones',
+            initialDate: '2018-08-27T10:18:00',
+            finalDate: '2018-08-30T10:18:00',
+            initialPrice: 800,
+            closed: false,
+            image: 'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+            category: 'Marvel',
+            bids: []
+        })
+
+        const idUser = user._id.toString()
+        const idProduct = product._id.toString()
+
+        beforeEach(() => {
+            user.isNew=true
+            product.isNew=true
+
+            return Promise.all([
+                user.save(),
+                product.save()
+            ])
+        })
+
+        it('should add a wish', () => {
+            return logic.addWish(idProduct, idUser)
+                .then(res => {
+                    expect(res).to.be.true
+                    return User.findOne({ '_id': idUser })
+                })
+                .then(res => {
+                    expect(res.wishes.length).to.equal(1)
+                })
+        })
+
+        
+        it('should fail at adding the same product two times', () => {
+            return logic.addWish(idProduct, idUser)
+                .then(() => {
+                    return logic.addWish(idProduct, idUser)
+                })
+                .catch(res => res)
+                .then(({ message }) => expect(message).to.equal('you cannot add a product twice to de wish list'))
         })
     })
 
