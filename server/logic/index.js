@@ -152,7 +152,7 @@ const logic = {
 
                                 return Product.findByIdAndUpdate(productId, { $push: {bids: bid}})
                                     .then(() => {
-                                        user.bidded.push(bid._id)
+                                        user.bidded.push(productId)
                                         return user.save()
                                     })
                             })
