@@ -25,7 +25,7 @@ describe('logic', () => {
         return Promise.all([Product.remove(), User.remove(), Bid.remove()])
     })
 
-    true && describe('register user', () => {
+    !true && describe('register user', () => {
         it('should register correctly', () =>
             User.findOne({ email })
                 .then(user => {
@@ -205,7 +205,7 @@ describe('logic', () => {
 
     })
 
-    true && describe('authenticate', () => {
+    !true && describe('authenticate', () => {
         const notExistingEmail = 'jlb@gmail.com', incorrectPassword = '123456', email = 'javier@gmail.com', password = '123', name = 'Javi', surname = 'Lopez'
 
 
@@ -288,7 +288,7 @@ describe('logic', () => {
 
     })
 
-    true && describe('list user bids', () => {
+    !true && describe('list user bids', () => {
         const user = new User({ email, password, role, name, surname })
 
         const bid = new Bid({ price: 500, date: new Date(), user: user._id })
@@ -347,7 +347,7 @@ describe('logic', () => {
         })
     })
 
-    true && describe('list user wishes', () => {
+    !true && describe('list user wishes', () => {
         const user = new User({ email, password, role, name, surname })
 
         const product = new Product({
@@ -383,7 +383,7 @@ describe('logic', () => {
         })
     })
 
-    true && describe('list all products', () => {
+    !true && describe('list all products', () => {
         const product = new Product({
             title: 'Thanos infinity gauntlet',
             description: 'Original gauntlet used on the movie infinity war, with all the infinite stones',
@@ -435,7 +435,7 @@ describe('logic', () => {
         )
     })
 
-    true && describe('retrieve product', () => {
+    !true && describe('retrieve product', () => {
         const product = new Product({
             title: 'Thanos infinity gauntlet',
             description: 'Original gauntlet used on the movie infinity war, with all the infinite stones',
@@ -472,7 +472,7 @@ describe('logic', () => {
 
     })
 
-    true && describe('retrieve user', () => {
+    !true && describe('retrieve user', () => {
         const user = new User({ email, password, role, name, surname })
 
         beforeEach(() =>
@@ -501,7 +501,7 @@ describe('logic', () => {
 
     })
 
-    true && describe('add bid', () => {
+    !true && describe('add bid', () => {
 
         const user = new User({ email, password, role, name, surname })
         const bid = new Bid({ price: 900, date: new Date(), user: user._id })
@@ -578,7 +578,7 @@ describe('logic', () => {
         })
     })
 
-    true && describe('add wish', () => {
+    !true && describe('add wish', () => {
         const user = new User({ email, password, role, name, surname })
         const product = new Product({
             title: 'Thanos infinity gauntlet',
@@ -625,6 +625,54 @@ describe('logic', () => {
                 .catch(res => res)
                 .then(({ message }) => expect(message).to.equal('you cannot add a product twice to de wish list'))
         })
+    })
+
+    !true && describe('delete wish', () => {
+        const product = new Product({
+            title: 'Thanos infinity gauntlet',
+            description: 'Original gauntlet used on the movie infinity war, with all the infinite stones',
+            initialDate: '2018-08-27T10:18:00',
+            finalDate: '2018-08-30T10:18:00',
+            initialPrice: 800,
+            closed: false,
+            image: 'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
+            category: 'Marvel',
+            bids: []
+        })
+        const user = new User({ email, password, role, name, surname, wishes: [product._id]})
+
+        beforeEach(() => {
+            user.isNew=true
+            product.isNew=true
+
+            return Promise.all([
+                user.save(),
+                product.save()
+            ])
+        })
+
+        const productId = product._id.toString()
+        const userId = user._id.toString()
+
+        it('should delete a wish correctly', () => 
+            logic.deleteWish(productId, userId)
+                .then(res =>{ 
+                    expect(res).to.be.true
+                    return User.findOne({ '_id' : userId})
+                })
+                .then(user =>
+                    expect(user.wishes.length).to.equal(0)
+                )
+        )
+
+        it('should fail at deleting a wish that does not exist', () => 
+            logic.deleteWish(productId, userId)
+                .then(() => 
+                    logic.deleteWish(productId, userId)
+                )
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('you cannot delete a product that is not in your wish list'))
+        )
     })
 
     after(() =>

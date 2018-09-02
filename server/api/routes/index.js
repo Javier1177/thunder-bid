@@ -119,6 +119,33 @@ router.post('/product/:productId/bid/:userId', [validateJwt, jsonBodyParser], (r
         })
 })
 
+//Add a wish
+router.post('/product/:productId/wish/:userId', validateJwt, (req, res) => {
+    const { params: {productId, userId } } = req
+
+    logic.addWish(productId, userId)
+        .then(() => {
+            res.status(201).json({ message : 'Wish added correctly' })
+        })
+        .catch(err => {
+            const { message } = err
+
+            res.status(err instanceof Error ? 400 : 500).json({ message })
+        })
+})
+
+//Delete a wish
+router.delete('/product/:productId/wish/:userId', validateJwt, (req, res) => {
+    const { params: { productId, userId } } = req
+
+    logic.deleteWish(productId, userId)
+    .then(() => res.json({ message: 'Wish deleted correctly'}))
+    .catch(err => {
+        const { message } = err
+
+        res.status(err instanceof Error ? 400 : 500).json({ message })
+    })
+})
 
 
 module.exports = router

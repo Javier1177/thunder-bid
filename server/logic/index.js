@@ -193,14 +193,14 @@ const logic = {
                 return User.findOne({ '_id' : userId})
                     .then(user => {
                         if(!user) throw Error(`no user found with this id`)
-
                         return Product.findOne({ '_id' : productId})
                             .then(productMatch => {
                                 if(!productMatch)  throw Error(`no product found with id`)
-                                if(productMatch.closed) throw Error('product closed')
-                                if(user.wishes.indexOf(productMatch._id) != 1) throw Error('you cannot delete a product that is not in your wish list')
-                                let idPosition = user.wishes.push(user.wishes.indexOf(productMatch._id))
+                                if(user.wishes.indexOf(productId) < 0) throw Error('you cannot delete a product that is not in your wish list')
+                                
+                                let idPosition = user.wishes.indexOf(productId)
                                 user.wishes.splice(idPosition,1)
+    
                                 return user.save()
                             })
                             .then(() => true)
