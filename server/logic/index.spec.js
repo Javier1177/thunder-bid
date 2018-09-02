@@ -405,7 +405,7 @@ describe('logic', () => {
             logic.listProducts('thanos', 'Marvel')
                 .then(products => {
                     expect(products[0].title).to.equal('Thanos infinity gauntlet')
-                    expect(products[0].closed).to.be.false
+                    expect(products[0].closed).to.be.true
                     expect(products[0].initialPrice).to.equal(800)
                 })
         )

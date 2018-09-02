@@ -84,16 +84,24 @@ const logic = {
                     validate._validateStringField('category', category)
                     filter.category = category
                 } 
-
-                return Product.find(filter, { __v: 0, _id: 0}, {
-                    sort: {
-                        finalDate: 1
-                    }
-                })
-                .then(products => {
-                    if(!products.length) throw new Error(`products not found`)
-                    return products
-                })
+                return Product.find({ finalDate: { $lt: Date.now() }})
+                    .then(res => {
+                        res.forEach(product => {
+                            return Product.findByIdAndUpdate(product._id.toString(), {closed: true})
+                                .then(res => res)
+                        })
+                    })
+                    .then(() => {
+                        return Product.find(filter, { __v: 0, _id: 0}, {
+                            sort: {
+                                finalDate: 1
+                            }
+                        })
+                        .then(products => {
+                            if(!products.length) throw new Error(`products not found`)
+                            return products
+                        })
+                    })
             })
     },
 
