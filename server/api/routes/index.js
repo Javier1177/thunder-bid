@@ -60,7 +60,7 @@ router.get('/product/:productId',  (req, res) =>{
 })
 
 //Show user by id
-router.get('/user/:userId',  (req, res) =>{
+router.get('/user/:userId', validateJwt, (req, res) =>{
     const { params: { userId} } = req
 
     return logic.retrieveUser(userId)
@@ -110,7 +110,7 @@ router.post('/product/:productId/bid/:userId', [validateJwt, jsonBodyParser], (r
 
     logic.addBid(productId, userId, price)
         .then(() => {
-            res.status(201).json({ message : 'Bid added correctly' })
+            res.status(201).json({status: 'OK', message : 'Bid added correctly' })
         })
         .catch(err => {
             const { message } = err

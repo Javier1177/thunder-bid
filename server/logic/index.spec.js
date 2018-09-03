@@ -578,7 +578,7 @@ describe('logic', () => {
         })
     })
 
-    !true && describe('add wish', () => {
+    true && describe('add wish', () => {
         const user = new User({ email, password, role, name, surname })
         const product = new Product({
             title: 'Thanos infinity gauntlet',

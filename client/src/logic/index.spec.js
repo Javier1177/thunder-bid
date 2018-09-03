@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-require('isomorphic-fetch')
+const fetch  = require('isomorphic-fetch')
 const { expect } = require('chai')
 const logic = require('.')
 const jwt = require('jsonwebtoken')
@@ -155,6 +155,88 @@ describe('logic', () => {
             .then(() => logic.login(email, ''))
             .catch(res => res)
             .then(({ message }) => {expect(message).to.equal('invalid password')})
+        )
+    })
+
+    !true && describe('list user bids', () => {
+        it('should list all user bids correctly', () =>
+            logic.register(email, password, name, surname)
+                .then(() => logic.login(email, password))
+                .then(user => {
+                    return logic.addBid('5b8d4811d5642748843b4b84', user.id, 100256, user.token)
+                })
+                .then(() => logic.login(email, password))
+                .then(res => logic.listUserBiddedProducts(res.id, res.token))
+                .then(bids => {
+                    expect(bids.data[0].title).to.equal('Thanos infinity gauntlet')
+                    expect(bids.data[0].initialPrice).to.equal(800)
+                    expect(bids.data[0].category).to.equal('Marvel')
+                })
+        )
+
+        it('should fail on showing the list all user bids if the user does not have any ', () =>
+            logic.register(email, password, name, surname)
+                .then(() => logic.login(email, password))
+                .then(res => logic.listUserBiddedProducts(res.id, res.token))
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('this user did not make any bid'))
+        )
+    })
+
+    !true && describe('retrieve user', () => {
+        it('should show user details', () => 
+            logic.register(email, password, name, surname)
+                .then(() => logic.login(email, password))
+                .then(data => 
+                    logic.retrieveUser(data.id, data.token))
+                .then(user => {
+                    expect(user.data.name).to.equal(name)
+                    expect(user.data.surname).to.equal(surname)
+                    expect(user.data.email).to.equal(email)
+                    expect(user.data.password).to.equal(password)
+                    expect(user.data.wishes.length).to.equal(0)
+                    expect(user.data.bidded.length).to.equal(0)
+                })
+       )
+    })
+
+    !true && describe('add bid', () => {
+        it('should add a bid correctly', () =>
+            logic.register(email, password, name, surname)
+                .then(() => logic.login(email, password))
+                .then(user => {
+                    return logic.addBid('5b8d4811d5642748843b4b84', user.id, 10001, user.token)
+                })
+                .then(({message}) => expect(message).to.equal('Bid added correctly'))               
+        )
+
+        it('should fail on adding a bid with a lower price', () => 
+            logic.register(email, password, name, surname)
+                .then(() => logic.login(email, password))
+                .then(user => {
+                    return logic.addBid('5b8d4811d5642748843b4b84', user.id, 5, user.token)
+                })
+                .catch(err => err)
+                .then(({message}) => expect(message).to.equal('the price of the bid should be higher than the current price'))    
+        )
+    })
+
+    //TODO
+    !true && describe('add wish', () => {
+        it('should add a wish correctly', () =>
+            logic.register(email, password, name, surname)
+                .then(() => logic.login(email, password))
+                              
+        )
+
+        it('should fail on adding a bid with a lower price', () => 
+            logic.register(email, password, name, surname)
+                .then(() => logic.login(email, password))
+                .then(user => {
+                    return logic.addBid('5b8d4811d5642748843b4b84', user.id, 5, user.token)
+                })
+                .catch(err => err)
+                .then(({message}) => expect(message).to.equal('the price of the bid should be higher than the current price'))    
         )
     })
 })

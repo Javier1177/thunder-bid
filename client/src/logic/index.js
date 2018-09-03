@@ -50,6 +50,58 @@ const logic = {
             })
     },
 
+    listUserBiddedProducts(userId, token){
+        return Promise.resolve()
+            .then(() => this._call(`user/bidded/${userId}`, 'get', {authorization: `bearer ${token}`}, undefined, 200))
+            .then(res => res.json())
+            .catch(err => err)
+    },
+
+    //TODO TEST
+    listUserWishes(userId, token){
+        return Promise.resolve()
+            .then(() => this._call(`user/wishes/${userId}`, 'get', {authorization: `bearer ${token}`}, undefined, 201))
+            .then(res => res.json())
+            .catch(err => err)
+    },
+
+    retrieveProduct(productId){
+        Promise.resolve()
+            .then(() => this._call(`product/${productId}`, 'get', undefined, undefined, 200))
+            .then(res => res.json())
+            .catch(err => err)
+    },
+
+    retrieveUser(userId, token){
+        return Promise.resolve()
+            .then(() => this._call(`user/${userId}`, 'get', {authorization: `bearer ${token}`}, undefined, 200))
+            .then(res => {
+                return res.json()
+            })
+            .catch(err => err)
+    },
+
+    addBid(productId, userId, price, token){
+        return Promise.resolve()
+            .then(() => this._call(`product/${productId}/bid/${userId}`, 'post', 
+                {authorization: `bearer ${token}`, 'content-type': 'application/json'},
+                JSON.stringify({ price }), 201))
+            .then(res => {
+                return res.json()
+            })
+            .catch(err => err)
+    },
+
+    //TODO
+    addWish(productId, userId, token){
+        return Promise.resolve()
+            .then(() => this._call(`product/${productId}/wish/${userId}`, 'post', 
+                {authorization: `bearer ${token}`}, undefined, 201))
+            .then(res => {
+                return res.json()
+            })
+            .catch(err => err)
+    },
 
 }
 
