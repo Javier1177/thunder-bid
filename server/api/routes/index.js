@@ -148,13 +148,17 @@ router.delete('/product/:productId/wish/:userId', validateJwt, (req, res) => {
 })
 
 //List all products
-//TODO querys
 router.get('/products', (req, res) => {
     const { query: { q, c} } = req
 
     return logic.listProducts(q, c)
         .then(products => {
             res.status(200).json({ data: products})
+        })
+        .catch(err => {
+            const { message } = err
+
+            res.status(err instanceof Error ? 404 : 500).json({ message })
         })
 })
 

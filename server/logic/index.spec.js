@@ -402,7 +402,7 @@ describe('logic', () => {
         )
 
         it('should succeed on correct data', () =>
-            logic.listProducts('thanos', 'Marvel')
+            logic.listProducts(undefined, 'Marvel')
                 .then(products => {
                     expect(products[0].title).to.equal('Thanos infinity gauntlet')
                     expect(products[0].closed).to.be.true

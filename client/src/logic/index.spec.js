@@ -167,7 +167,6 @@ describe('logic', () => {
                     .then(() => logic.listUserBiddedProducts(user.id, user.token))
                 })
                 .then(bids => {
-                    debugger
                     expect(bids.data[0].title).to.equal('Thanos infinity gauntlet')
                     expect(bids.data[0].initialPrice).to.equal(800)
                     expect(bids.data[0].category).to.equal('Marvel')
@@ -287,5 +286,32 @@ describe('logic', () => {
                         .catch(err => err)
                         .then(({ message }) => expect(message).to.equal('you cannot delete a product that is not in your wish list'))
                 }))
+    })
+
+    true && describe('list products', () => {
+        const query = 'Thanos', category='Marvel', incorrectQuery = 'asdf' 
+        it('should list all products correctly', () => 
+            logic.listProducts(query, category)
+                .then(({data}) => {
+                    expect(data[0].title).to.equal('Thanos infinity gauntlet')
+                    expect(data[0].description).to.equal('Original gauntlet used on the movie infinity war, with all the infinite stones')
+                    expect(data[0].initialPrice).to.equal(800)
+                }))
+
+        //TODO revise when there is no query
+        it('should list all products that has the category', () =>
+            logic.listProducts(undefined, category)
+            .then(data => {
+                debugger
+                expect(data[0].title).to.equal('Thanos infinity gauntlet')
+                expect(data[0].description).to.equal('Original gauntlet used on the movie infinity war, with all the infinite stones')
+                expect(data[0].initialPrice).to.equal(800)
+            }))
+
+        it('should fail to list products if there is no products with the query', () =>
+            logic.listProducts(incorrectQuery, category)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal('products not found'))
+        )
     })
 })

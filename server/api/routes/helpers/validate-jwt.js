@@ -8,8 +8,6 @@ function validateJwt(req, res, next) {
     try {
         const authorization = req.get('authorization')
 
-        debugger
-
         if (!authorization || !authorization.length) throw new Error('invalid token')
 
         const parts = authorization.split(' ')

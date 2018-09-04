@@ -103,6 +103,28 @@ const logic = {
             .then(() => this._call(`product/${productId}/wish/${userId}`, 'delete', {authorization: `bearer ${token}`}, undefined, 200))
             .then(res => res.json())
             .catch(err => err)
+    },
+    //TODO revise when there is no query
+    listProducts(query, category){
+        return Promise.resolve()
+            .then(() => {
+                let _query = ''
+
+                if (query || category) {
+                    _query += '?'
+
+                    if (query) _query += `q=${query}`
+                    debugger
+                    if (category) _query += `${query? '&' :''}c=${category}`
+
+                }
+                debugger
+                return this._call(`/products${_query}`, 'get', { 'content-type': 'application/json' }, undefined, 200)
+            })
+            .then(res => {
+                debugger
+                return res.json()})
+            .catch(err => err)
     }
 
 }
