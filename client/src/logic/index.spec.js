@@ -163,11 +163,11 @@ describe('logic', () => {
             logic.register(email, password, name, surname)
                 .then(() => logic.login(email, password))
                 .then(user => {
-                    return logic.addBid('5b8d4811d5642748843b4b84', user.id, 100256, user.token)
+                    return logic.addBid('5b8e477d0e80404ccc9c4e7e', user.id, 164500257, user.token)
+                    .then(() => logic.listUserBiddedProducts(user.id, user.token))
                 })
-                .then(() => logic.login(email, password))
-                .then(res => logic.listUserBiddedProducts(res.id, res.token))
                 .then(bids => {
+                    debugger
                     expect(bids.data[0].title).to.equal('Thanos infinity gauntlet')
                     expect(bids.data[0].initialPrice).to.equal(800)
                     expect(bids.data[0].category).to.equal('Marvel')
@@ -180,6 +180,30 @@ describe('logic', () => {
                 .then(res => logic.listUserBiddedProducts(res.id, res.token))
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal('this user did not make any bid'))
+        )
+    })
+
+    !true && describe('list user wishes', () => {
+        it('should list user wishes correctly', () => 
+            logic.register(email, password, name, surname)
+                .then(() => logic.login(email, password))
+                .then(data => {
+                    return logic.addWish('5b8e477d0e80404ccc9c4e7e', data.id, data.token)
+                        .then(() => logic.listUserWishes(data.id, data.token))
+                        .then(({data}) => {
+                            expect(data[0].title).to.equal('Thanos infinity gauntlet')
+                            expect(data[0].description).to.equal('Original gauntlet used on the movie infinity war, with all the infinite stones')
+                            expect(data[0].initialPrice).to.equal(800)
+                        })
+                })
+        )
+
+        it('should fail if the user does not have any wish', () => 
+            logic.register(email, password, name, surname)
+                .then(() => logic.login(email, password))
+                .then(data => logic.listUserWishes(data.id, data.token))
+                .catch(err => err)
+                .then(({message}) => expect(message).to.equal('this user did not add any wish'))
         )
     })
 
@@ -205,7 +229,7 @@ describe('logic', () => {
             logic.register(email, password, name, surname)
                 .then(() => logic.login(email, password))
                 .then(user => {
-                    return logic.addBid('5b8d4811d5642748843b4b84', user.id, 10001, user.token)
+                    return logic.addBid('5b8e477d0e80404ccc9c4e7e', user.id, 164500258, user.token)
                 })
                 .then(({message}) => expect(message).to.equal('Bid added correctly'))               
         )
@@ -214,29 +238,54 @@ describe('logic', () => {
             logic.register(email, password, name, surname)
                 .then(() => logic.login(email, password))
                 .then(user => {
-                    return logic.addBid('5b8d4811d5642748843b4b84', user.id, 5, user.token)
+                    return logic.addBid('5b8e477d0e80404ccc9c4e7e', user.id, 5, user.token)
                 })
                 .catch(err => err)
                 .then(({message}) => expect(message).to.equal('the price of the bid should be higher than the current price'))    
         )
     })
-
-    //TODO
+    
     !true && describe('add wish', () => {
         it('should add a wish correctly', () =>
             logic.register(email, password, name, surname)
                 .then(() => logic.login(email, password))
-                              
+                .then(data => logic.addWish('5b8e477d0e80404ccc9c4e7e', data.id, data.token))
+                .then(({message}) => expect(message).to.equal('Wish added correctly'))                             
         )
 
-        it('should fail on adding a bid with a lower price', () => 
+        it('should fail at adding a wish twice', () => 
+            logic.register(email, password, name, surname)
+                .then(() => 
+                    logic.login(email, password)
+                        .then(data => {
+                            return logic.addWish('5b8e477d0e80404ccc9c4e7e', data.id, data.token)
+                                .then(() => logic.addWish('5b8e477d0e80404ccc9c4e7e', data.id, data.token))
+                                .catch(err => err)
+                                .then(({ message }) => expect(message).to.equal('you cannot add a product twice to de wish list'))      
+                        })
+                )
+        )
+    })
+
+    !true && describe('delete wish', () => {
+        it('should delete a wish correctly', () =>  
             logic.register(email, password, name, surname)
                 .then(() => logic.login(email, password))
-                .then(user => {
-                    return logic.addBid('5b8d4811d5642748843b4b84', user.id, 5, user.token)
-                })
-                .catch(err => err)
-                .then(({message}) => expect(message).to.equal('the price of the bid should be higher than the current price'))    
-        )
+                .then(data => {
+                    return logic.addWish('5b8e477d0e80404ccc9c4e7e', data.id, data.token)
+                        .then(() => logic.deleteWish('5b8e477d0e80404ccc9c4e7e', data.id, data.token))
+                        .then(({ message }) => expect(message).to.equal('Wish deleted correctly'))
+                }))
+        
+        it('should delete a wish correctly', () =>  
+            logic.register(email, password, name, surname)
+                .then(() => logic.login(email, password))
+                .then(data => {
+                    return logic.addWish('5b8e477d0e80404ccc9c4e7e', data.id, data.token)
+                        .then(() => logic.deleteWish('5b8e477d0e80404ccc9c4e7e', data.id, data.token))
+                        .then(() => logic.deleteWish('5b8e477d0e80404ccc9c4e7e', data.id, data.token))
+                        .catch(err => err)
+                        .then(({ message }) => expect(message).to.equal('you cannot delete a product that is not in your wish list'))
+                }))
     })
 })

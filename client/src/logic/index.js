@@ -7,12 +7,11 @@ const logic = {
         const config = { method }
         if (headers) config.headers = headers
         if (body) config.body = body
-
         return fetch(`${this.url}/${path}`, config)
             .then(res => {
                 if (res.status === expectedStatus) {
                     return res
-                } else
+                } else 
                     return res.json()
                         .then(({ message }) => {
                             throw new Error(message)
@@ -57,10 +56,10 @@ const logic = {
             .catch(err => err)
     },
 
-    //TODO TEST
     listUserWishes(userId, token){
         return Promise.resolve()
-            .then(() => this._call(`user/wishes/${userId}`, 'get', {authorization: `bearer ${token}`}, undefined, 201))
+            .then(() => {
+                return this._call(`user/wishes/${userId}`, 'get', {authorization: `bearer ${token}`}, undefined, 200)})
             .then(res => res.json())
             .catch(err => err)
     },
@@ -92,16 +91,19 @@ const logic = {
             .catch(err => err)
     },
 
-    //TODO
     addWish(productId, userId, token){
         return Promise.resolve()
-            .then(() => this._call(`product/${productId}/wish/${userId}`, 'post', 
-                {authorization: `bearer ${token}`}, undefined, 201))
-            .then(res => {
-                return res.json()
-            })
+            .then(() => this._call(`product/${productId}/wish/${userId}`, 'post', {authorization: `bearer ${token}`}, undefined, 201))
+            .then(res => res.json())
             .catch(err => err)
     },
+
+    deleteWish(productId, userId, token){
+        return Promise.resolve()
+            .then(() => this._call(`product/${productId}/wish/${userId}`, 'delete', {authorization: `bearer ${token}`}, undefined, 200))
+            .then(res => res.json())
+            .catch(err => err)
+    }
 
 }
 
