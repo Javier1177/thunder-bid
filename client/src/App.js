@@ -5,7 +5,8 @@ import './App.css'
 import Error404 from './components/Error404'
 import Register from './components/Register'
 import Login from './components/Login'
-
+import UserWishes from './components/UserWishes'
+import UserBids from './components/UserBids'
 
 class App extends Component {
   state = {
@@ -24,7 +25,7 @@ class App extends Component {
     return !!this.state.userId
   }
 
-  handleLogout = (e) => {
+  handleLogout = e => {
     e.preventDefault()
     this.setState({
       userId:'',
@@ -35,9 +36,12 @@ class App extends Component {
 
   render() {
     return <div>
+
     <Switch>
-      <Route path='/register' render={() => this.state.isLoggedIn ? <Redirect to='/home' /> : <Register/> } />
-      <Route path='/login' render={() => this.state.isLoggedIn ? <Redirect to='/home'/> : <Login handleLogin={this.handleLogin}/> } />
+      <Route path='/register' render={() => this.isLoggedIn() ? <Redirect to='/' /> : <Register/> } />
+      <Route path='/login' render={() => this.isLoggedIn() ? <Redirect to='/'/> : <Login handleLogin={this.handleLogin}/> } />
+      <Route path='/user/wishes' render={() => this.isLoggedIn() ? <UserWishes /> : <Redirect to='/' />} />
+      <Route path='/user/bids' render={() => this.isLoggedIn() ? <UserBids /> : <Redirect to='/' />} />
       <Route Component={Error404} />
     </Switch>
     </div>

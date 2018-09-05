@@ -388,7 +388,7 @@ describe('logic', () => {
             title: 'Thanos infinity gauntlet',
             description: 'Original gauntlet used on the movie infinity war, with all the infinite stones',
             initialDate: '2018-08-27T10:18:00',
-            finalDate: '2018-08-30T10:18:00',
+            finalDate: '2018-10-30T10:18:00',
             initialPrice: 800,
             closed: false,
             image: 'https://i.pinimg.com/originals/fb/c3/9a/fbc39a8147a728afd55f7fb21154d605.png',
@@ -405,7 +405,7 @@ describe('logic', () => {
             logic.listProducts(undefined, 'Marvel')
                 .then(products => {
                     expect(products[0].title).to.equal('Thanos infinity gauntlet')
-                    expect(products[0].closed).to.be.true
+                    expect(products[0].closed).to.be.false
                     expect(products[0].initialPrice).to.equal(800)
                 })
         )
