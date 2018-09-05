@@ -18,7 +18,7 @@ class UserWishes extends Component{
     }
 
     deletewishes = productId => {
-        logic.deleteWish(productId, this.state.userId, this.state.wishList)
+        logic.deleteWish(productId, this.state.userId, this.state.token)
             .then(() => logic.listUserWishes(this.state.userId, this.state.token))
             .then(({data}) => {
                 this.setState({
@@ -28,13 +28,11 @@ class UserWishes extends Component{
 
     render() {
 
-
-        //TODO Delete wishes(no pilla el id)
         return <div>
-            {this.state.wishList.map(e => {
+            {this.state.wishList === undefined && <h2>You have no wishes yet!</h2> }
+            {this.state.wishList != undefined && this.state.wishList.map(e => {
                 debugger
                 return <Wish deletewishes={this.deletewishes} id={e._id} key={e} product={e}/>
-                //<div>{e.title}</div>
             })}
         </div>
     }
