@@ -302,7 +302,7 @@ describe('logic', () => {
         it('should list all products that has the category', () =>
             logic.listProducts(undefined, category)
             .then(data => {
-                debugger
+                
                 expect(data[0].title).to.equal('Thanos infinity gauntlet')
                 expect(data[0].description).to.equal('Original gauntlet used on the movie infinity war, with all the infinite stones')
                 expect(data[0].initialPrice).to.equal(800)

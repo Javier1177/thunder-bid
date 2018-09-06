@@ -22,7 +22,7 @@ class UserBids extends Component{
         return <div>
             {this.state.bidList === undefined && <h2>You have no bids yet!</h2> }
             {this.state.bidList != undefined && this.state.bidList.map(e => {
-                debugger
+                
                 return <Bids product={e}/>
             })}
         </div>
