@@ -45,7 +45,7 @@ const logic = {
                     'Content-Type': 'application/json'
                 }, JSON.stringify({ email, password }), 200)
                     .then(res => res.json())
-                    .catch(err => err)
+                    .catch(err => {throw new Error(err)})
             })
     },
 

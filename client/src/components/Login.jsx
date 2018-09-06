@@ -23,8 +23,10 @@ class Login extends Component {
             .then(res => {
                 this.props.handleLogin(res.id, res.token)
             })
+            .catch(err => console.log(err))
     }
 
+    //TODO handle error Wrong password/email
     render() {
 
         return <div>

@@ -7,6 +7,8 @@ import Register from './components/Register'
 import Login from './components/Login'
 import UserWishes from './components/UserWishes'
 import UserBids from './components/UserBids'
+import NavBar from './components/NavBar'
+import Home from './components/Home'
 
 class App extends Component {
   state = {
@@ -36,8 +38,9 @@ class App extends Component {
 
   render() {
     return <div>
-
+      <NavBar isLoggedIn={this.isLoggedIn} handleLogout={this.handleLogout}/>
     <Switch>
+      <Route exact path='/' render={() => <Home/>} />
       <Route path='/register' render={() => this.isLoggedIn() ? <Redirect to='/' /> : <Register/> } />
       <Route path='/login' render={() => this.isLoggedIn() ? <Redirect to='/'/> : <Login handleLogin={this.handleLogin}/> } />
       <Route path='/user/wishes' render={() => this.isLoggedIn() ? <UserWishes /> : <Redirect to='/' />} />

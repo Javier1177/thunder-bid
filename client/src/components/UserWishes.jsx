@@ -31,7 +31,6 @@ class UserWishes extends Component{
         return <div>
             {this.state.wishList === undefined && <h2>You have no wishes yet!</h2> }
             {this.state.wishList != undefined && this.state.wishList.map(e => {
-                debugger
                 return <Wish deletewishes={this.deletewishes} id={e._id} key={e} product={e}/>
             })}
         </div>
