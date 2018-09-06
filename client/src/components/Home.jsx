@@ -45,7 +45,7 @@ class Home extends Component {
         return <div> 
             <form onSubmit={this.findProduct}>
                 <input type='text' value={this.state.query} name='query' onChange={this.handleChange}/>
-                <input type='radio' value='' name='category' onChange={this.handleChange} />
+                <input type='radio' value='' name='category' onChange={this.handleChange}/>
                 <label>All</label>
                 <input type='radio' value='Movie' name='category' onChange={this.handleChange}/>
                 <label>Movie</label>
