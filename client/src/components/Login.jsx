@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import logic from '../logic'
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
 
 class Login extends Component {
     state = {
@@ -28,19 +29,17 @@ class Login extends Component {
 
     //TODO handle error Wrong password/email
     render() {
-
-        return <div>
-            <h1>LOGIN</h1>
-            <form onSubmit={this.handleSubmit}>
-                <label>Email*</label>
-                <input type="email" onChange={this.handleChange} name="email" />
-                <label>Password*</label>
-                <input type="password" name="password" onChange={this.handleChange} />
-
-                <button type="submit">Submit</button>
-            </form>
-        </div>
-
+        return <Form onSubmit={this.handleSubmit}>
+        <FormGroup>
+          <Label>Email</Label>
+          <Input type="email" name="email" onChange={this.handleChange} name="email" />
+        </FormGroup>
+        <FormGroup>
+          <Label>Password</Label>
+          <Input type="password" name="password" onChange={this.handleChange} />
+        </FormGroup>
+        <Button>Submit</Button>
+      </Form>
     }
 }
 
