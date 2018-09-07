@@ -1,5 +1,7 @@
 import React, { Component } from "react"
 import logic from '../logic'
+import socketIOClient from "socket.io-client"
+const socket = socketIOClient('http://localhost:8080');
 
 class ProductDetail extends Component {
     state = {
@@ -19,6 +21,12 @@ class ProductDetail extends Component {
                 })
             })
     }
+
+//       IO
+//   send = () => {
+//     const productPrice = Number(this.state.productPrice)
+//     socket.emit('update tasks', productPrice)
+//   }
 
     handleChange = (e) => {
         const { name, value } = e.target

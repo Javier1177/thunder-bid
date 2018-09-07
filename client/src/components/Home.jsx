@@ -13,7 +13,6 @@ class Home extends Component {
     componentDidMount(){
         logic.listProducts(this.state.query, this.state.category)
             .then(({data}) => {
-                debugger
                 this.setState({
                 products: data
             })})
