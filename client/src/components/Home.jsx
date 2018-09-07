@@ -13,6 +13,7 @@ class Home extends Component {
     componentDidMount(){
         logic.listProducts(this.state.query, this.state.category)
             .then(({data}) => {
+                debugger
                 this.setState({
                 products: data
             })})
@@ -58,8 +59,7 @@ class Home extends Component {
             </form>
             <div>
             {this.state.products === undefined && <h2>There is no products yet!</h2> }
-            {this.state.products != undefined && this.state.products.map(e => {
-                
+            {this.state.products !== undefined && this.state.products.map(e => {
                 return <Product product={e}/>
             })}
             </div>

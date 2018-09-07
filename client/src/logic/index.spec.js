@@ -288,7 +288,7 @@ describe('logic', () => {
                 }))
     })
 
-    true && describe('list products', () => {
+    !true && describe('list products', () => {
         const query = 'Thanos', category='Marvel', incorrectQuery = 'asdf' 
         it('should list all products correctly', () => 
             logic.listProducts(query, category)
@@ -298,7 +298,6 @@ describe('logic', () => {
                     expect(data[0].initialPrice).to.equal(800)
                 }))
 
-        //TODO revise when there is no query
         it('should list all products that has the category', () =>
             logic.listProducts(undefined, category)
             .then(data => {

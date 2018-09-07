@@ -65,7 +65,7 @@ const logic = {
     },
 
     retrieveProduct(productId){
-        Promise.resolve()
+        return Promise.resolve()
             .then(() => this._call(`product/${productId}`, 'get', undefined, undefined, 200))
             .then(res => res.json())
             .catch(err => err)
@@ -104,7 +104,7 @@ const logic = {
             .then(res => res.json())
             .catch(err => err)
     },
-    //TODO revise when there is no query
+
     listProducts(query, category){
         return Promise.resolve()
             .then(() => {

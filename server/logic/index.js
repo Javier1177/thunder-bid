@@ -92,7 +92,7 @@ const logic = {
                         })
                     })
                     .then(() => {
-                        return Product.find(filter, { __v: 0, _id: 0}, {
+                        return Product.find(filter, { __v: 0}, {
                             sort: {
                                 finalDate: 1
                             }

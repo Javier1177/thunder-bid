@@ -12,6 +12,7 @@ class UserBids extends Component{
     componentDidMount(){
         logic.listUserBiddedProducts(this.state.userId, this.state.token)
             .then(({data}) => {
+                debugger
                 this.setState({
                 bidList: data
             })})
@@ -23,7 +24,7 @@ class UserBids extends Component{
             {this.state.bidList === undefined && <h2>You have no bids yet!</h2> }
             {this.state.bidList != undefined && this.state.bidList.map(e => {
                 
-                return <Bids product={e}/>
+                return <Bids product={e} idUser={this.state.userId}/>
             })}
         </div>
     }

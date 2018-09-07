@@ -9,6 +9,7 @@ import UserWishes from './components/UserWishes'
 import UserBids from './components/UserBids'
 import NavBar from './components/NavBar'
 import Home from './components/Home'
+import ProductDetail from './components/ProductDetail'
 
 class App extends Component {
   state = {
@@ -33,7 +34,8 @@ class App extends Component {
       userId:'',
       token:''
     })
-    sessionStorage.clear()
+    this.props.history.push('/')
+    
   }
 
   render() {
@@ -45,6 +47,7 @@ class App extends Component {
       <Route path='/login' render={() => this.isLoggedIn() ? <Redirect to='/'/> : <Login handleLogin={this.handleLogin}/> } />
       <Route path='/user/wishes' render={() => this.isLoggedIn() ? <UserWishes /> : <Redirect to='/' />} />
       <Route path='/user/bids' render={() => this.isLoggedIn() ? <UserBids /> : <Redirect to='/' />} />
+      <Route path='/product/:id' render={(props) => <ProductDetail id={props.match.params.id}/> }/>
       <Route Component={Error404} />
     </Switch>
     </div>
