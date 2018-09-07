@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import logic from '../logic'
 import socketIOClient from "socket.io-client"
-const socket = socketIOClient('http://localhost:8080');
+const socket = socketIOClient('http://localhost:8080')
 
 class ProductDetail extends Component {
     state = {
@@ -13,20 +13,26 @@ class ProductDetail extends Component {
     }
 
     componentDidMount(){
+        this.fetchPrice()
+
+        socket.on('fetch price', () => this.fetchPrice())
+    }
+
+    fetchPrice = () => {
         return logic.retrieveProduct(this.props.id)
-            .then(({data}) => {
-                this.setState({
-                    product: data,
-                    productId: data._id
-                })
+        .then(({data}) => {
+            this.setState({
+                product: data,
+                productId: data._id
             })
+        })
     }
 
 //       IO
-//   send = () => {
-//     const productPrice = Number(this.state.productPrice)
-//     socket.emit('update tasks', productPrice)
-//   }
+  send = () => {
+    const productPrice = Number(this.state.productPrice)
+    socket.emit('update price', productPrice)
+  }
 
     handleChange = (e) => {
         const { name, value } = e.target
@@ -41,6 +47,8 @@ class ProductDetail extends Component {
         const {userId, token, productPrice, productId } = this.state
         const bidPrice = Number(productPrice)
         logic.addBid(productId, userId, bidPrice, token)
+            .then(()=> this.fetchPrice())
+            .then(()=> this.send())
             .catch(({message}) => console.log(message))
     }
 
@@ -50,7 +58,6 @@ class ProductDetail extends Component {
 
         logic.addWish(productId, userId, token)
             .catch(({message}) => console.log(message))
-
     }
 
     render() {
