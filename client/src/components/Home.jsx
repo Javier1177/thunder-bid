@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import logic from '../logic'
 import Product from './Product'
+import socketIOClient from "socket.io-client"
+const socket = socketIOClient('http://localhost:8080')
 
 class Home extends Component {
 
@@ -11,12 +13,19 @@ class Home extends Component {
     }
 
     componentDidMount(){
-        logic.listProducts(this.state.query, this.state.category)
+        this.fetchProducts()
+
+        socket.on('fetch price', () => this.fetchProducts())
+    }
+
+    fetchProducts = () => {
+        return logic.listProducts(this.state.query, this.state.category)
             .then(({data}) => {
                 this.setState({
                 products: data
             })})
     }
+
 
     findProduct = e => {
         e.preventDefault()

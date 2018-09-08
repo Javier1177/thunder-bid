@@ -18,6 +18,10 @@ class ProductDetail extends Component {
         socket.on('fetch price', () => this.fetchPrice())
     }
 
+    componentWillUnmount(){
+        socket.disconnect()
+    }
+
     fetchPrice = () => {
         return logic.retrieveProduct(this.props.id)
         .then(({data}) => {
@@ -59,17 +63,21 @@ class ProductDetail extends Component {
         logic.addWish(productId, userId, token)
             .catch(({message}) => console.log(message))
     }
+ 
+    isLoggedIn = () => {
+        return !!this.state.userId
+      }
 
     render() {
         return <div>
             <h1>{this.state.product.title}</h1>
             <img src={this.state.product.image} width='200'/>
             <div> Price: {this.state.product && this.state.product.bids.length ? this.state.product.bids[this.state.product.bids.length-1].price : this.state.product.initialPrice} €</div>
-            
-            <form onSubmit={this.handleSubmit}>
+           {this.isLoggedIn() ? <form onSubmit={this.handleSubmit}>
                 <input type='number' name='productPrice' onChange={this.handleChange}/>
                 <button type='submit'>Make the bid!</button>
-            </form>
+            </form> : <div>You should Log In to make a bid</div>} 
+            
             <button onClick={this.saveWish}>Mark it as a wish!</button>
         </div>
     }

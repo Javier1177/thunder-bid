@@ -39,6 +39,7 @@ class App extends Component {
   }
 
   render() {
+
     return <div>
       <NavBar isLoggedIn={this.isLoggedIn} handleLogout={this.handleLogout}/>
     <Switch>
@@ -48,7 +49,7 @@ class App extends Component {
       <Route path='/user/wishes' render={() => this.isLoggedIn() ? <UserWishes /> : <Redirect to='/' />} />
       <Route path='/user/bids' render={() => this.isLoggedIn() ? <UserBids /> : <Redirect to='/' />} />
       <Route path='/product/:id' render={(props) => <ProductDetail id={props.match.params.id}/> }/>
-      <Route Component={Error404} />
+      <Route path='/' render={() => <Error404 />} />
     </Switch>
     </div>
   }

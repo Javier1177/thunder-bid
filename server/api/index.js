@@ -25,6 +25,7 @@ mongoose.connect(MONGO_URL, { useNewUrlParser: true })
             socket.on('update price', () => {
                 io.sockets.emit('fetch price')
               })
+
         })
 
         http.listen(PORT, () => console.log(`${package.name} ${package.version} up and running on port ${PORT}`))

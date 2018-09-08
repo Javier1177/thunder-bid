@@ -10,6 +10,8 @@ class Product extends Component {
                 <li>{this.props.product.description}</li>
                 {this.props.product.closed ? <li>Product closed</li> : <li>Product open</li>}
                 <li>Auction ends on {this.props.product.finalDate.slice(0,10)} at {this.props.product.finalDate.slice(11,19)}H </li>
+                <li> Price: {this.props.product && this.props.product.bids.length ? this.props.product.bids[this.props.product.bids.length-1].price : this.props.product.initialPrice} €</li>
+
             </ul>
             <Link to={`/product/${this.props.product._id}`}><button>Make a bid!</button></Link>
           </div>
