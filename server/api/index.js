@@ -24,6 +24,7 @@ mongoose.connect(MONGO_URL, { useNewUrlParser: true })
 
             socket.on('update price', () => {
                 io.sockets.emit('fetch price')
+                console.log('price fetched')
               })
 
         })

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import logic from '../logic'
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
+import swal from 'sweetalert2'
 
 class Login extends Component {
     state = {
@@ -24,7 +25,12 @@ class Login extends Component {
             .then(res => {
                 this.props.handleLogin(res.id, res.token)
             })
-            .catch(err => console.log(err))
+            .catch(({message}) =>  swal({
+                title: "Failed!",
+                text: message,
+                type: "error",
+                confirmButtonText: "Try again"
+              }))
     }
 
     //TODO handle error Wrong password/email
@@ -32,7 +38,7 @@ class Login extends Component {
         return <Form onSubmit={this.handleSubmit}>
         <FormGroup>
           <Label>Email</Label>
-          <Input type="email" name="email" onChange={this.handleChange} name="email" />
+          <Input type="text" name="email" onChange={this.handleChange} name="email" />
         </FormGroup>
         <FormGroup>
           <Label>Password</Label>

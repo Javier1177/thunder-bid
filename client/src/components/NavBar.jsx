@@ -13,10 +13,6 @@ import {
     DropdownItem } from 'reactstrap'
 
 class NavBar extends Component{
-    state = {
-        userId: sessionStorage.getItem('userId') || '',
-        token: sessionStorage.getItem('token') || ''
-    }
 
     render() {
         return <div>

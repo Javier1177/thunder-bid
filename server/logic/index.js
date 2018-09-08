@@ -31,7 +31,7 @@ const logic = {
             })
             .then(user => {
                 if(!user) throw new Error(`${email} does not exists`)
-                if (user.password !== password) throw new Error('wrong password')
+                if (user.password !== password) throw new Error('Wrong password')
 
                 return user
             })
@@ -150,11 +150,11 @@ const logic = {
                         return Product.findOne({ '_id' : productId})
                             .then(productMatch => {   
                                 if(!productMatch)  throw Error(`no product found with id`)
-                                if(productMatch.closed) throw Error('product closed')
+                                if(productMatch.closed) throw Error('Product closed')
                                 let minPrice
                                 if(productMatch.bids.length) minPrice = productMatch.bids[productMatch.bids.length - 1].price
                                 else minPrice = productMatch.initialPrice
-                                if(minPrice >= price) throw Error('the price of the bid should be higher than the current price')
+                                if(minPrice >= price) throw Error('The price of the bid should be higher than the current price')
     
                                 const bid = new Bid({ price, date: Date.now(), user: userId })
 
@@ -182,8 +182,8 @@ const logic = {
                         return Product.findOne({ '_id' : productId})
                             .then(productMatch => {
                                 if(!productMatch)  throw Error(`no product found with id`)
-                                if(productMatch.closed) throw Error('product closed')
-                                if(user.wishes.indexOf(productMatch._id) != -1) throw Error('you cannot add a product twice to de wish list')
+                                if(productMatch.closed) throw Error('Product closed')
+                                if(user.wishes.indexOf(productMatch._id) != -1) throw Error('You cannot add a product twice to de wish list')
                                 user.wishes.push(productMatch._id)
                                 return user.save()
                             })
@@ -204,7 +204,7 @@ const logic = {
                         return Product.findOne({ '_id' : productId})
                             .then(productMatch => {
                                 if(!productMatch)  throw Error(`no product found with id`)
-                                if(user.wishes.indexOf(productId) < 0) throw Error('you cannot delete a product that is not in your wish list')
+                                if(user.wishes.indexOf(productId) < 0) throw Error('You cannot delete a product that is not in your wish list')
                                 
                                 let idPosition = user.wishes.indexOf(productId)
                                 user.wishes.splice(idPosition,1)

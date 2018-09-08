@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import logic from '../logic'
+import swal from 'sweetalert2'
 import socketIOClient from "socket.io-client"
 const socket = socketIOClient('http://localhost:8080')
 
@@ -53,7 +54,14 @@ class ProductDetail extends Component {
         logic.addBid(productId, userId, bidPrice, token)
             .then(()=> this.fetchPrice())
             .then(()=> this.send())
-            .catch(({message}) => console.log(message))
+            .catch(err =>
+                swal({
+                  title: "Failed!",
+                  text: err,
+                  type: "error",
+                  confirmButtonText: "Try again"
+                })
+              )
     }
 
     saveWish = e => {
@@ -61,7 +69,14 @@ class ProductDetail extends Component {
         const { productId, userId, token } = this.state
 
         logic.addWish(productId, userId, token)
-            .catch(({message}) => console.log(message))
+        .catch(({message}) =>
+            swal({
+              title: "Failed!",
+              text: message,
+              type: "error",
+              confirmButtonText: "Try again"
+            })
+          )
     }
  
     isLoggedIn = () => {

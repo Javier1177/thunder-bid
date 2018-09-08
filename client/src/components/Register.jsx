@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import logic from '../logic'
+import swal from 'sweetalert2'
 
 class Register extends Component{
     state = {
@@ -24,7 +25,12 @@ class Register extends Component{
         const {email, password, name, surname } = this.state
         logic.register(email, password, name, surname)
             .then(() => this.props.history.push('/login'))
-            .catch(({message}) => console.log(message))
+            .catch(({message}) =>  swal({
+                title: "Failed!",
+                text: message,
+                type: "error",
+                confirmButtonText: "Try again"
+              }))
     }
 
     render() {
@@ -33,7 +39,7 @@ class Register extends Component{
             <h1>REGISTER</h1>
             <form onSubmit={this.handleSubmit}>
                 <label>Email*</label>
-                <input type='email' onChange={this.handleChange} name='email'/>
+                <input type='text' onChange={this.handleChange} name='email'/>
                 <label>Password*</label>
                 <input type='password' name='password' onChange={this.handleChange}/>
                 <label>Name*</label>

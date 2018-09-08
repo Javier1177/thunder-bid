@@ -31,7 +31,7 @@ const logic = {
                     'Content-Type': 'application/json'
                 }, JSON.stringify({ email, password, name, surname }), 201)
                     .then(() => true)
-                    .catch(err => err)
+                    .catch(err => {throw new Error(err)})
             })
     },
 
@@ -45,7 +45,7 @@ const logic = {
                     'Content-Type': 'application/json'
                 }, JSON.stringify({ email, password }), 200)
                     .then(res => res.json())
-                    .catch(err => {throw new Error(err)})
+                    .catch(({message}) => {throw new Error(message)})
             })
     },
 
@@ -88,21 +88,21 @@ const logic = {
             .then(res => {
                 return res.json()
             })
-            .catch(err => err)
+            .catch(err => {throw new Error(err)})
     },
 
     addWish(productId, userId, token){
         return Promise.resolve()
             .then(() => this._call(`product/${productId}/wish/${userId}`, 'post', {authorization: `bearer ${token}`}, undefined, 201))
             .then(res => res.json())
-            .catch(err => err)
+            .catch(({message}) => {throw new Error(message)})
     },
 
     deleteWish(productId, userId, token){
         return Promise.resolve()
             .then(() => this._call(`product/${productId}/wish/${userId}`, 'delete', {authorization: `bearer ${token}`}, undefined, 200))
             .then(res => res.json())
-            .catch(err => err)
+            .catch(err => {throw new Error(err)})
     },
 
     listProducts(query, category){

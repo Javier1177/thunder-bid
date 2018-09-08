@@ -34,8 +34,7 @@ class App extends Component {
       userId:'',
       token:''
     })
-    this.props.history.push('/')
-    
+    sessionStorage.clear()
   }
 
   render() {
