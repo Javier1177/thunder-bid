@@ -2,7 +2,15 @@ const { Product, User, Bid} = require('../data/models')
 const { validate } = require('../utils/validate')
 
 const logic = {
-
+    /**
+     * Registers a new user in the database.
+     * 
+     * @param {string} email 
+     * @param {string} password 
+     * @param {string} name 
+     * @param {string} surname 
+     * 
+     */
     register(email, password, name, surname){
         return Promise.resolve()
             .then(() => {
@@ -21,6 +29,13 @@ const logic = {
             .then(() => true)
     },
 
+    /**
+     * Allows you to retrieve a userId of a user.
+     * 
+     * @param {string} email 
+     * @param {string} password 
+     * 
+     */
     authenticate(email, password){
         return Promise.resolve()
             .then(() => {
@@ -37,6 +52,12 @@ const logic = {
             })
     },
 
+    /**
+     * Allows you to retrieve all bids of a user.
+     * 
+     * @param {string} userId 
+     * 
+     */
     listUserBiddedProducts(userId){
         return Promise.resolve()
             .then(() => {
@@ -52,6 +73,12 @@ const logic = {
             })
     },
 
+    /**
+     * Allows you to retrieve all wishes of a user.
+     * 
+     * @param {string} userId 
+     * 
+     */
     listUserWishes(userId){
         return Promise.resolve()
             .then(() => {
@@ -67,6 +94,14 @@ const logic = {
             })
     },
 
+    /**
+     * Allows you to retrieve products by query and category.
+     * If you don't give any param it will show all products.
+     * 
+     * @param {string} query optional
+     * @param {string} category optional 
+     * 
+     */
     listProducts(query, category){
         return Promise.resolve()
             .then(() => {
@@ -105,6 +140,12 @@ const logic = {
             })
     },
 
+    /**
+     * Allows you to retrieve product details.
+     * 
+     * @param {string} productId 
+     * 
+     */
     retrieveProduct(productId){
         return Promise.resolve()
             .then(() =>{
@@ -121,6 +162,12 @@ const logic = {
             })
     },
 
+    /**
+     * Allows you to retrieve user details.
+     * 
+     * @param {string} idUser 
+     * 
+     */
     retrieveUser(idUser){
         return Promise.resolve()
             .then(() => {
@@ -137,6 +184,14 @@ const logic = {
             })
     },
 
+    /**
+     * Allows you to add a bid.
+     * 
+     * @param {string} productId 
+     * @param {string} userId 
+     * @param {number} price 
+     * 
+     */
     addBid(productId, userId, price){
         return Promise.resolve()
             .then(() => {
@@ -169,6 +224,13 @@ const logic = {
             })
     },
 
+    /**
+     * Allows you to add a wish.
+     * 
+     * @param {string} productId 
+     * @param {string} userId 
+     * 
+     */
     addWish(productId, userId){
         return Promise.resolve()
             .then(() => {
@@ -192,6 +254,13 @@ const logic = {
             })
     },
 
+        /**
+     * Allows you to delete a wish.
+     * 
+     * @param {string} productId 
+     * @param {string} userId 
+     * 
+     */
     deleteWish(productId, userId){
         return Promise.resolve()
             .then(() => {
