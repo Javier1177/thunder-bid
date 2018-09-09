@@ -54,10 +54,10 @@ class ProductDetail extends Component {
         logic.addBid(productId, userId, bidPrice, token)
             .then(()=> this.fetchPrice())
             .then(()=> this.send())
-            .catch(err =>
+            .catch(({message}) =>
                 swal({
                   title: "Failed!",
-                  text: err,
+                  text: message,
                   type: "error",
                   confirmButtonText: "Try again"
                 })
@@ -88,10 +88,14 @@ class ProductDetail extends Component {
             <h1>{this.state.product.title}</h1>
             <img src={this.state.product.image} width='200'/>
             <div> Price: {this.state.product && this.state.product.bids.length ? this.state.product.bids[this.state.product.bids.length-1].price : this.state.product.initialPrice} €</div>
-           {this.isLoggedIn() ? <form onSubmit={this.handleSubmit}>
-                <input type='number' name='productPrice' onChange={this.handleChange}/>
-                <button type='submit'>Make the bid!</button>
-            </form> : <div>You should Log In to make a bid</div>} 
+           {this.isLoggedIn() 
+            ? this.state.product.closed 
+                ? <div>This product is closed</div> 
+                : <form onSubmit={this.handleSubmit}>
+                        <input type='number' name='productPrice' onChange={this.handleChange}/>
+                        <button type='submit'>Make the bid!</button>
+                    </form> 
+            : <div>You should Log In to make a bid</div>} 
             
             <button onClick={this.saveWish}>Mark it as a wish!</button>
         </div>

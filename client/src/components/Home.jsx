@@ -15,8 +15,7 @@ class Home extends Component {
 
     componentDidMount(){
         this.fetchProducts()
-
-        socket.on('fetch price', () => this.fetchProducts())
+        .then(() => socket.on('fetch price', () => this.fetchProducts()))
     }
 
     fetchProducts = () => {
