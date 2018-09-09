@@ -9,7 +9,8 @@ class Home extends Component {
     state = {
         query: '',
         category: '',
-        products: []
+        products: [],
+        selectedOption: ''
     }
 
     componentDidMount(){
@@ -39,14 +40,22 @@ class Home extends Component {
     resetSearch = () => {
         this.setState({
             query: '',
-            category:''
+            category:'',
+            selectedOption: ''
         })
     }
 
     handleChange = e => {
         const {name, value} = e.target
         this.setState({
-            [name]: value
+            [name]: value,
+        })
+    }
+
+    handleCategory = e => {
+        const {value} = e.target
+        this.setState({
+            selectedOption: value,
         })
     }
 
@@ -54,16 +63,16 @@ class Home extends Component {
         return <div> 
             <form onSubmit={this.findProduct}>
                 <input type='text' value={this.state.query} name='query' onChange={this.handleChange}/>
-                <input type='radio' value='' name='category' onChange={this.handleChange}/>
+                <input type='radio' value='' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === ''}/>
                 <label>All</label>
-                <input type='radio' value='Movie' name='category' onChange={this.handleChange}/>
+                <input type='radio' value='Movie' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Movie'}/>
                 <label>Movie</label>
-                <input type='radio' value='Marvel' name='category' onChange={this.handleChange}/>
+                <input type='radio' value='Marvel' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Marvel'}/>
                 <label>Marvel</label>
-                <input type='radio' value='Games' name='category' onChange={this.handleChange}/>
+                <input type='radio' value='Games' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Games'}/>
                 <label>Games</label>
                 <button type='submit'>Submit</button>
-                <button onClick={this.resetSearch}>resetSearch</button>
+                <button onClick={this.resetSearch}>Reset </button>
             </form>
             <div>
             {this.state.products === undefined && <h2>There is no products yet!</h2> }
