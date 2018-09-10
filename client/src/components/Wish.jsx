@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import {Link} from 'react-router-dom'
 
 class Wish extends Component {
     render() {
@@ -9,6 +10,7 @@ class Wish extends Component {
                 <li>{this.props.product.description}</li>
             </ul>
             <button onClick={() => this.props.deletewishes(this.props.id)}>DELETE ME</button>
+            <Link to={`/product/${this.props.product._id}`}><button>See product</button></Link>
           </div>
   
         }

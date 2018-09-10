@@ -8,7 +8,6 @@ class Home extends Component {
 
     state = {
         query: '',
-        category: '',
         products: [],
         selectedOption: ''
     }
@@ -19,7 +18,7 @@ class Home extends Component {
     }
 
     fetchProducts = () => {
-        return logic.listProducts(this.state.query, this.state.category)
+        return logic.listProducts(this.state.query, this.state.selectedOption)
             .then(({data}) => {
                 this.setState({
                 products: data
@@ -29,7 +28,8 @@ class Home extends Component {
 
     findProduct = e => {
         e.preventDefault()
-        logic.listProducts(this.state.query, this.state.category)
+        debugger
+        logic.listProducts(this.state.query, this.state.selectedOption)
             .then(({data}) => {
                 this.setState({
                 products: data
@@ -39,7 +39,6 @@ class Home extends Component {
     resetSearch = () => {
         this.setState({
             query: '',
-            category:'',
             selectedOption: ''
         })
     }
@@ -64,17 +63,19 @@ class Home extends Component {
                 <input type='text' value={this.state.query} name='query' onChange={this.handleChange}/>
                 <input type='radio' value='' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === ''}/>
                 <label>All</label>
-                <input type='radio' value='Movie' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Movie'}/>
-                <label>Movie</label>
+                <input type='radio' value='Movies' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Movies'}/>
+                <label>Movies</label>
+                <input type='radio' value='Music' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Music'}/>
+                <label>Music</label>
                 <input type='radio' value='Marvel' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Marvel'}/>
                 <label>Marvel</label>
                 <input type='radio' value='Games' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Games'}/>
                 <label>Games</label>
-                <button type='submit'>Submit</button>
-                <button onClick={this.resetSearch}>Reset </button>
+                <button type='submit'>Search</button>
+                <button onClick={this.resetSearch}>Reset</button>
             </form>
             <div>
-            {this.state.products === undefined && <h2>There is no products yet!</h2> }
+            {this.state.products === undefined && <h2>There is no products with these characteristics</h2> }
             {this.state.products !== undefined && this.state.products.map(e => {
                 return <Product product={e}/>
             })}

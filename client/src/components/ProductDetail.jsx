@@ -33,11 +33,11 @@ class ProductDetail extends Component {
         })
     }
 
-//       IO
-  send = () => {
-    const productPrice = Number(this.state.productPrice)
-    socket.emit('update price', productPrice)
-  }
+    //       IO
+    send = () => {
+        const productPrice = Number(this.state.productPrice)
+        socket.emit('update price', productPrice)
+    }
 
     handleChange = (e) => {
         const { name, value } = e.target
@@ -81,13 +81,20 @@ class ProductDetail extends Component {
  
     isLoggedIn = () => {
         return !!this.state.userId
-      }
+    }
+
+    goToLogin = () => {
+        this.props.history.push('/login')
+    }
+
+    
 
     render() {
         return <div>
             <h1>{this.state.product.title}</h1>
             <img src={this.state.product.image} width='200'/>
-            <div> Price: {this.state.product && this.state.product.bids.length ? this.state.product.bids[this.state.product.bids.length-1].price : this.state.product.initialPrice} €</div>
+            <div>{this.state.product.description}</div>
+            <div> {this.state.product && this.state.product.bids.length ? this.state.product.bids[this.state.product.bids.length-1].price : this.state.product.initialPrice} €</div>
            {this.isLoggedIn() 
             ? this.state.product.closed 
                 ? <div>This product is closed</div> 
@@ -97,7 +104,7 @@ class ProductDetail extends Component {
                     </form> 
             : <div>You should Log In to make a bid</div>} 
             
-            <button onClick={this.saveWish}>Mark it as a wish!</button>
+            {this.isLoggedIn() && !this.state.product.closed && <button onClick={this.saveWish}>Mark it as a wish!</button>}
         </div>
     }
 }

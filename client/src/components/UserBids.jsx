@@ -11,7 +11,8 @@ class UserBids extends Component{
 
     componentDidMount(){
         logic.listUserBiddedProducts(this.state.userId, this.state.token)
-            .then(({data}) => {        
+            .then(({data}) => {
+                debugger        
                 this.setState({
                 bidList: data
             })})

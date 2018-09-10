@@ -69,7 +69,12 @@ const logic = {
                 if(!user) throw new Error(`user does not exist`)
                 if(!user.bidded.length) throw new Error('this user did not make any bid')
 
-                return user.bidded
+                
+                return user.bidded.filter((obj, pos, arr) => {
+                    return arr.map(mapObj => mapObj['title']).indexOf(obj['title']) === pos;
+                });
+
+                // return user.bidded
             })
     },
 

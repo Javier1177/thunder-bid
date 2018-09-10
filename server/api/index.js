@@ -27,6 +27,11 @@ mongoose.connect(MONGO_URL, { useNewUrlParser: true })
                 console.log('price fetched')
               })
 
+                socket.on("disconnect", () => {
+                    console.log("Disconnected")
+                })
+
+
         })
 
         http.listen(PORT, () => console.log(`${package.name} ${package.version} up and running on port ${PORT}`))
