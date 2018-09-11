@@ -33,12 +33,6 @@ class ProductDetail extends Component {
         })
     }
 
-    //       IO
-    send = () => {
-        const productPrice = Number(this.state.productPrice)
-        socket.emit('update price', productPrice)
-    }
-
     handleChange = (e) => {
         const { name, value } = e.target
 
@@ -53,7 +47,6 @@ class ProductDetail extends Component {
         const bidPrice = Number(productPrice)
         logic.addBid(productId, userId, bidPrice, token)
             .then(()=> this.fetchPrice())
-            .then(()=> this.send())
             .catch(({message}) =>
                 swal({
                   title: "Failed!",

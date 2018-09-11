@@ -7,9 +7,7 @@ class Bid extends Component {
             <ul>
                 <li><img src={this.props.product.image} height='200' width='100'></img></li>            
                 <li>{this.props.product.description}</li>
-                {/* TODO SHOW MY BID PRICE */}
-                {/* <li> Your bid to this product: {this.props.product && this.props.product.bids[this.props.product.bids.lastIndexOf(this.props.idUser)].price} €</li> */}
-                
+                <li> Your bid to this product: {this.props.product && this.props.product.bids[this.props.product.bids.map(e => e.user).lastIndexOf(this.props.idUser)].price} €</li>              
             </ul>
           </div>
   

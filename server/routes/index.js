@@ -5,8 +5,9 @@ require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken')
-const {logic} = require('../../logic')
+const {logic} = require('../logic')
 const validateJwt = require('./helpers/validate-jwt')
+const sockets = require('../sockets')
 
 const router = express.Router()
 const jsonBodyParser = bodyParser.json()
@@ -111,8 +112,12 @@ router.post('/product/:productId/bid/:userId', [validateJwt, jsonBodyParser], (r
     logic.addBid(productId, userId, price)
         .then(() => {
             res.status(201).json({status: 'OK', message : 'Bid added correctly' })
+            
+            sockets.io.emit('fetch price')            
         })
         .catch(err => {
+            debugger
+
             const { message } = err
             
             res.status(err instanceof Error ? 400 : 500).json({ message })
