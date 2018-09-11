@@ -115,8 +115,7 @@ router.post('/product/:productId/bid/:userId', [validateJwt, jsonBodyParser], (r
             
             sockets.io.emit('fetch price')            
         })
-        .catch(err => {
-            debugger
+        .catch(err => {         
 
             const { message } = err
             

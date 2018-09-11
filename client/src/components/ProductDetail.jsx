@@ -47,6 +47,12 @@ class ProductDetail extends Component {
         const bidPrice = Number(productPrice)
         logic.addBid(productId, userId, bidPrice, token)
             .then(()=> this.fetchPrice())
+            .then(() => swal({
+                title: "Bidded!",
+                text: 'You will see your bid on your bid list.',
+                type: "success",
+                confirmButtonText: "Okay"
+              }))
             .catch(({message}) =>
                 swal({
                   title: "Failed!",
@@ -62,6 +68,12 @@ class ProductDetail extends Component {
         const { productId, userId, token } = this.state
 
         logic.addWish(productId, userId, token)
+        .then(() => swal({
+            title: "Saved!",
+            text: 'You will see the product on your wish list.',
+            type: "success",
+            confirmButtonText: "Okay"
+          }))
         .catch(({message}) =>
             swal({
               title: "Failed!",

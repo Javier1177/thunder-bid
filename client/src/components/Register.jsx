@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom'
 import logic from '../logic'
 import swal from 'sweetalert2'
 
-class Register extends Component{
+class Register extends Component {
     state = {
         email: '',
         password: '',
@@ -19,37 +19,54 @@ class Register extends Component{
         })
     }
 
-    handleSubmit = e =>{
+    handleSubmit = e => {
         e.preventDefault()
 
-        const {email, password, name, surname } = this.state
+        const { email, password, name, surname } = this.state
         logic.register(email, password, name, surname)
             .then(() => this.props.history.push('/login'))
-            .catch(({message}) =>  swal({
+            .then(() => swal({
+                title: "Register success!",
+                text: 'You can make Login now.',
+                type: "success",
+                confirmButtonText: "Okay"
+            }))
+            .catch(({ message }) => swal({
                 title: "Failed!",
                 text: message,
                 type: "error",
                 confirmButtonText: "Try again"
-              }))
+            }))
     }
 
     render() {
-
-        return <div>
-            <h1>REGISTER</h1>
-            <form onSubmit={this.handleSubmit}>
-                <label>Email*</label>
-                <input type='text' onChange={this.handleChange} name='email'/>
-                <label>Password*</label>
-                <input type='password' name='password' onChange={this.handleChange}/>
-                <label>Name*</label>
-                <input type='text' name='name' onChange={this.handleChange}/>
-                <label>Surname*</label>
-                <input type='text' name='surname' onChange={this.handleChange}/>
-                <button type='submit'>Submit</button>
-            </form>
+        return <div class="container">
+            <div class="row mt-5">
+                <div class="col-3"></div>
+                <div class="col">
+                    <form onSubmit={this.handleSubmit}>
+                        <div className="form-group">
+                            <label>Email address</label>
+                            <input type="text" className="form-control" onChange={this.handleChange} name='email' placeholder="Enter email" />
+                        </div>
+                        <div className="form-group">
+                            <label>Password</label>
+                            <input type="password" className="form-control" name='password' onChange={this.handleChange} placeholder="Password" />
+                        </div>
+                        <div className="form-group">
+                            <label>Name</label>
+                            <input type="text" className="form-control" name='name' onChange={this.handleChange} placeholder="Name" />
+                        </div>
+                        <div className="form-group">
+                            <label>Surname</label>
+                            <input type="text" className="form-control" name='surname' onChange={this.handleChange} placeholder="Surname" />
+                        </div>
+                        <button type="submit" className="btn btn-primary">Register</button>
+                    </form>
+                </div>
+                <div class="col-3"></div>
+            </div>
         </div>
-
     }
 }
 

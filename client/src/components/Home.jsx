@@ -42,6 +42,12 @@ class Home extends Component {
             query: '',
             selectedOption: ''
         })
+        logic.listProducts('', '')
+            .then(({ data }) => {
+                this.setState({
+                    products: data
+                })
+            })
     }
 
     handleChange = e => {
@@ -59,45 +65,46 @@ class Home extends Component {
     }
 
     render() {
-        return <div class="container">
-            <div class="row">
-                <div class="col-3">
-                    <form onSubmit={this.findProduct}>
-                        <div class="form-group">
-                            <input type="text" class="form-control" value={this.state.query} name='query' onChange={this.handleChange} placeholder="Write something..." />
+        return <div className="container">
+            <div className="row mt-5">
+                <div className="col-3">
+                    <form onSubmit={this.findProduct} style={{backgroundColor:'#F8F9FA', border: '1px solid #e8e8e8', padding: '15px', borderRadius: '5px'}}>
+                        <h3>Search</h3>
+                        <div className="form-group">
+                            <input type="text" className="form-control" value={this.state.query} name='query' onChange={this.handleChange} placeholder="Write something..." />
                         </div>
                         <div className='row'>
                             <div className='col'>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" value='' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === ''} />
-                                    <label class="form-check-label">All</label>
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio" value='' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === ''} />
+                                    <label className="form-check-label">All</label>
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" value='Movies' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Movies'} />
-                                    <label class="form-check-label">Movies</label>
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio" value='Movies' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Movies'} />
+                                    <label className="form-check-label">Movies</label>
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" value='Music' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Music'} />
-                                    <label class="form-check-label">Music</label>
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio" value='Music' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Music'} />
+                                    <label className="form-check-label">Music</label>
                                 </div>
                             </div>
                             <div className='col'>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" value='Marvel' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Marvel'} />
-                                    <label class="form-check-label">Marvel</label>
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio" value='Marvel' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Marvel'} />
+                                    <label className="form-check-label">Marvel</label>
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" value='Games' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Games'} />
-                                    <label class="form-check-label">Games</label>
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio" value='Games' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Games'} />
+                                    <label className="form-check-label">Games</label>
                                 </div>
                             </div>
                         </div>
-                        <button type='submit' class="btn btn-primary mr-2 mt-4">Search</button>
+                        <button type='submit' className="btn btn-primary mr-2 mt-4">Search</button>
                         <button type="button" className="btn btn-danger mt-4" onClick={this.resetSearch}>Reset</button>
                     </form>
                 </div>
-                <div class="col-1"></div>
-                <div class="col-8">
+                <div className="col-1"></div>
+                <div className="col-8">
                     <div className="row">
                         {this.state.products === undefined && <h2>There is no products with these characteristics</h2> }
                         {this.state.products !== undefined && this.state.products.map(e => {
@@ -107,29 +114,6 @@ class Home extends Component {
                 </div>
             </div>
         </div>
-        // return <div> 
-        //     <form onSubmit={this.findProduct}>
-        //         <input type='text' value={this.state.query} name='query' onChange={this.handleChange}/>
-        //         <input type='radio' value='' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === ''}/>
-        //         <label>All</label>
-        //         <input type='radio' value='Movies' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Movies'}/>
-        //         <label>Movies</label>
-        //         <input type='radio' value='Music' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Music'}/>
-        //         <label>Music</label>
-        //         <input type='radio' value='Marvel' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Marvel'}/>
-        //         <label>Marvel</label>
-        //         <input type='radio' value='Games' name='category' onChange={this.handleCategory} checked={this.state.selectedOption === 'Games'}/>
-        //         <label>Games</label>
-        //         <button type='submit'>Search</button>
-        //         <button type="button" className="btn btn-primary" onClick={this.resetSearch}>Reset</button>
-        //     </form>
-        //     <div>
-        //     {this.state.products === undefined && <h2>There is no products with these characteristics</h2> }
-        //     {this.state.products !== undefined && this.state.products.map(e => {
-        //         return <Product product={e}/>
-        //     })}
-        //     </div>
-        // </div>
     }
 }
 

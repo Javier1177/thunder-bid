@@ -10,6 +10,7 @@ import UserBids from './components/UserBids'
 import NavBar from './components/NavBar'
 import Home from './components/Home'
 import ProductDetail from './components/ProductDetail'
+import swal from 'sweetalert2'
 
 class App extends Component {
   state = {
@@ -33,6 +34,12 @@ class App extends Component {
     this.setState({
       userId:'',
       token:''
+    })
+    swal({
+      title: "Bye!",
+      text: 'See you soon.',
+      type: "success",
+      confirmButtonText: "Okay"
     })
     sessionStorage.clear()
   }

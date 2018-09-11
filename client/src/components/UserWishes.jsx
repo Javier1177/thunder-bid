@@ -28,11 +28,13 @@ class UserWishes extends Component{
 
     render() {
 
-        return <div>
-            {this.state.wishList === undefined && <h2>You have no wishes yet!</h2> }
-            {this.state.wishList != undefined && this.state.wishList.map(e => {
-                return <Wish deletewishes={this.deletewishes} id={e._id} key={e} product={e}/>
-            })}
+        return <div className="col">
+            <div className="row">
+                {this.state.wishList === undefined && <h2>You have no wishes yet!</h2> }
+                {this.state.wishList != undefined && this.state.wishList.map(e => {
+                    return <Wish deletewishes={this.deletewishes} id={e._id} key={e} product={e}/>
+                })}
+            </div>
         </div>
     }
 
