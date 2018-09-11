@@ -22,6 +22,8 @@ class UserBids extends Component{
         return <div className="col">
             <div className="row">
                 {this.state.bidList === undefined && <h2>You have no bids yet!</h2>}
+                {this.state.bidList !== undefined && <h2 style={{width: '100%'}}>My bids</h2> }
+
                 {this.state.bidList != undefined && this.state.bidList.map(e => {                 
                     return <Bids product={e} idUser={this.state.userId}/>
                 })}

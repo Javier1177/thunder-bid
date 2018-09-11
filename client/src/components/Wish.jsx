@@ -12,7 +12,7 @@ class Wish extends Component {
                     <p style={{textAlign: 'center', fontSize: '20px'}}>{this.props.product && this.props.product.bids.length ? this.props.product.bids[this.props.product.bids.length - 1].price : this.props.product.initialPrice} €</p>
                     <br />
                     <Link to={`/product/${this.props.product._id}`}><button class="btn btn-info ml-2">See more</button></Link>
-                    <button class="btn btn-danger ml-5" onClick={() => this.props.deletewishes(this.props.id)}>Delete wish</button>
+                    <button class="btn btn-danger ml-4" onClick={() => this.props.deletewishes(this.props.id)}>Delete wish</button>
                 </div>
             </div>
             <br />

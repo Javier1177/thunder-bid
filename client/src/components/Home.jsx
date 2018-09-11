@@ -99,7 +99,7 @@ class Home extends Component {
                                 </div>
                             </div>
                         </div>
-                        <button type='submit' className="btn btn-primary mr-2 mt-4">Search</button>
+                        <button type='submit' className="btn btn-info mr-2 mt-4">Search</button>
                         <button type="button" className="btn btn-danger mt-4" onClick={this.resetSearch}>Reset</button>
                     </form>
                 </div>

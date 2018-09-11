@@ -11,13 +11,7 @@ class Product extends Component {
                     <h5 class="card-title">{this.props.product.title}</h5>
                     <p style={{ textAlign: 'center', fontSize: '18px' }}>{this.props.product && this.props.product.bids.length ? this.props.product.bids[this.props.product.bids.length - 1].price : this.props.product.initialPrice} €</p>
                     <br />
-                    <div className='row'>
-                        <div className="col-2"></div>
-                        <div className="col-3">
-                            <Link to={`/product/${this.props.product._id}`}><button class="btn btn-info">See more</button></Link>
-                        </div>
-                        <div className="col-4"></div>
-                    </div>
+                    <Link to={`/product/${this.props.product._id}`}><button class="btn btn-info">See more</button></Link>
                 </div>
             </div>
             <br />

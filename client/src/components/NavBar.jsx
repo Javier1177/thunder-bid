@@ -21,7 +21,7 @@ class NavBar extends Component{
                 <NavLink href="#/user/wishes">My wish list</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink onClick={this.props.handleLogout} href=''>Log Out</NavLink>
+                <NavLink onClick={this.props.handleLogout} href='#/'>Log Out</NavLink>
               </NavItem>
             </Nav>
         </Navbar> : <Navbar color="light" light expand="md" id="nav">
