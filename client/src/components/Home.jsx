@@ -108,7 +108,7 @@ class Home extends Component {
                     <div className="row">
                         {this.state.products === undefined && <h2>There is no products with these characteristics</h2> }
                         {this.state.products !== undefined && this.state.products.map(e => {
-                            return <Product product={e}/>
+                            return <Product product={e} key={e._id}/>
                         })}
                     </div>
                 </div>

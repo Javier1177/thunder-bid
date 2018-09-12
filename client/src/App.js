@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Switch, Route, withRouter, Redirect } from 'react-router-dom'
-import logo from './logo.svg'
 import './App.css'
 import Error404 from './components/Error404'
 import Register from './components/Register'

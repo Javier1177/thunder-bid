@@ -96,7 +96,7 @@ class ProductDetail extends Component {
         return <div className="container">
             <div className="row pt-5">
                 <div className="col-6" style={{paddingLeft: '100px'}}>
-                    <img src={this.state.product.image} width='200' />
+                    <img alt='product' src={this.state.product.image} width='200' />
                 </div>
                 <div className="col-6">
                     <h1>{this.state.product.title}</h1>
@@ -105,35 +105,18 @@ class ProductDetail extends Component {
                     {this.isLoggedIn()
                         ? this.state.product.closed
                             ? <p>This product is closed</p>
-                            : <form class="form-inline" onSubmit={this.handleSubmit}>
-                                <div class="form-group mb-2">
-                                    <input type="number" class="form-control" name='productPrice' onChange={this.handleChange} />
+                            : <form className="form-inline" onSubmit={this.handleSubmit}>
+                                <div className="form-group mb-2">
+                                    <input type="number" className="form-control" name='productPrice' onChange={this.handleChange} />
                                 </div>
-                                <button type="submit" class="btn btn-success mb-2 ml-2">Confirm bid</button>
+                                <button type="submit" className="btn btn-success mb-2 ml-2">Confirm bid</button>
                             </form>
                         : <p>You should Log In to make a bid</p>}
-
-                    {this.isLoggedIn() && !this.state.product.closed && <button onClick={this.saveWish}>Mark it as a wish!</button>}
+                    {this.isLoggedIn() && !this.state.product.closed && <a onClick={this.saveWish} href="" className="text-primary">Mark it as a wish!</a>}
 
                 </div>
             </div>
         </div>
-        // return <div>
-        //     <h1>{this.state.product.title}</h1>
-        //     <img src={this.state.product.image} width='200'/>
-        //     <div>{this.state.product.description}</div>
-        //     <div> {this.state.product && this.state.product.bids.length ? this.state.product.bids[this.state.product.bids.length-1].price : this.state.product.initialPrice} €</div>
-        //    {this.isLoggedIn() 
-        //     ? this.state.product.closed 
-        //         ? <div>This product is closed</div> 
-        //         : <form onSubmit={this.handleSubmit}>
-        //                 <input type='number' name='productPrice' onChange={this.handleChange}/>
-        //                 <button type='submit'>Make the bid!</button>
-        //             </form> 
-        //     : <div>You should Log In to make a bid</div>} 
-
-        //     {this.isLoggedIn() && !this.state.product.closed && <button onClick={this.saveWish}>Mark it as a wish!</button>}
-        // </div>
     }
 }
 export default ProductDetail

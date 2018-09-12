@@ -32,8 +32,8 @@ class UserWishes extends Component{
             <div className="row">
                 {this.state.wishList === undefined && <h2>You have no wishes yet!</h2> }
                 {this.state.wishList !== undefined && <h2 style={{width: '100%'}}>My wish List</h2> }
-                {this.state.wishList != undefined && this.state.wishList.map(e => {
-                    return <Wish deletewishes={this.deletewishes} id={e._id} key={e} product={e}/>
+                {this.state.wishList !== undefined && this.state.wishList.map(e => {
+                    return <Wish deletewishes={this.deletewishes} id={e._id} key={e._id} product={e}/>
                 })}
             </div>
         </div>

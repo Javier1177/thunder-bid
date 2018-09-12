@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import logic from '../logic'
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
 import swal from 'sweetalert2'
 
 class Login extends Component {
@@ -40,10 +39,10 @@ class Login extends Component {
     }
 
     render() {
-        return <div class="container">
-            <div class="row mt-5">
-                <div class="col-3"></div>
-                <div class="col">
+        return <div className="container">
+            <div className="row mt-5">
+                <div className="col-3"></div>
+                <div className="col">
                     <form onSubmit={this.handleSubmit}>
                         <div className="form-group">
                             <label>Email address</label>
@@ -56,7 +55,7 @@ class Login extends Component {
                         <button type="submit" className="btn btn-primary">Login</button>
                     </form>
                 </div>
-                <div class="col-3"></div>
+                <div className="col-3"></div>
             </div>
         </div>
     }

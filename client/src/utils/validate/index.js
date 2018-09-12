@@ -1,9 +1,7 @@
-'use strict'
- 
 const validate = {
     
     _validateStringField(name, value) {
-        if (typeof value !== 'string' || !value.length || value.indexOf(' ') == 0 || value.indexOf(' ') == value.length-1) throw new Error(`invalid ${name}`)
+        if (typeof value !== 'string' || !value.length || value.indexOf(' ') === 0 || value.indexOf(' ') === value.length-1) throw new Error(`invalid ${name}`)
     },
 
     _validateEmail(email) {
@@ -12,11 +10,11 @@ const validate = {
     },
 
     _validateNumber(number){
-        if (typeof number != 'number') throw Error('The value is not a number')
+        if (typeof number !== 'number') throw Error('The value is not a number')
     },
 
     _validateQueryString(name, value) {
-        if (typeof value !== 'string' || !value.length || value.indexOf(' ') == 0) throw new Error(`Invalid ${name}`)
+        if (typeof value !== 'string' || !value.length || value.indexOf(' ') === 0) throw new Error(`Invalid ${name}`)
     },
 
     _validateBoolean(name, value){

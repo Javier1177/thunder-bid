@@ -40,10 +40,10 @@ class Register extends Component {
     }
 
     render() {
-        return <div class="container">
-            <div class="row mt-5">
-                <div class="col-3"></div>
-                <div class="col">
+        return <div className="container">
+            <div className="row mt-5">
+                <div className="col-3"></div>
+                <div className="col">
                     <form onSubmit={this.handleSubmit}>
                         <div className="form-group">
                             <label>Email address</label>
@@ -64,7 +64,7 @@ class Register extends Component {
                         <button type="submit" className="btn btn-primary">Register</button>
                     </form>
                 </div>
-                <div class="col-3"></div>
+                <div className="col-3"></div>
             </div>
         </div>
     }
