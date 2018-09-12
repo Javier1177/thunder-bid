@@ -59,8 +59,7 @@ class ProductDetail extends Component {
                     text: message,
                     type: "error",
                     confirmButtonText: "Try again"
-                })
-            )
+                }))
     }
 
     saveWish = e => {

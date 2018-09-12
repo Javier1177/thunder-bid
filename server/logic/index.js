@@ -1,4 +1,4 @@
-const { Product, User, Bid} = require('../data/models')
+const { Product, User, Bid } = require('../data/models')
 const { validate } = require('../utils/validate')
 
 const logic = {
@@ -11,7 +11,7 @@ const logic = {
      * @param {string} surname 
      * 
      */
-    register(email, password, name, surname){
+    register(email, password, name, surname) {
         return Promise.resolve()
             .then(() => {
                 validate._validateEmail(email)
@@ -21,10 +21,10 @@ const logic = {
 
                 return User.findOne({ email })
             })
-            .then( user => {
-                if(user) throw new Error(`${email} already exists`)
+            .then(user => {
+                if (user) throw new Error(`${email} already exists`)
 
-                return User.create({ email, password, name, surname})
+                return User.create({ email, password, name, surname })
             })
             .then(() => true)
     },
@@ -36,7 +36,7 @@ const logic = {
      * @param {string} password 
      * 
      */
-    authenticate(email, password){
+    authenticate(email, password) {
         return Promise.resolve()
             .then(() => {
                 validate._validateEmail(email)
@@ -45,7 +45,7 @@ const logic = {
                 return User.findOne({ email })
             })
             .then(user => {
-                if(!user) throw new Error(`${email} does not exists`)
+                if (!user) throw new Error(`${email} does not exists`)
                 if (user.password !== password) throw new Error('Wrong password')
 
                 return user
@@ -58,7 +58,7 @@ const logic = {
      * @param {string} userId 
      * 
      */
-    listUserBiddedProducts(userId){
+    listUserBiddedProducts(userId) {
         return Promise.resolve()
             .then(() => {
                 validate._validateStringField('id user', userId)
@@ -66,10 +66,10 @@ const logic = {
                 return User.findOne({ '_id': userId }).populate('bidded')
             })
             .then(user => {
-                if(!user) throw new Error(`user does not exist`)
-                if(!user.bidded.length) throw new Error('this user did not make any bid')
+                if (!user) throw new Error(`user does not exist`)
+                if (!user.bidded.length) throw new Error('this user did not make any bid')
 
-                
+
                 return user.bidded.filter((obj, pos, arr) => {
                     return arr.map(mapObj => mapObj['title']).indexOf(obj['title']) === pos;
                 });
@@ -84,7 +84,7 @@ const logic = {
      * @param {string} userId 
      * 
      */
-    listUserWishes(userId){
+    listUserWishes(userId) {
         return Promise.resolve()
             .then(() => {
                 validate._validateStringField('id user', userId)
@@ -92,9 +92,9 @@ const logic = {
                 return User.findOne({ '_id': userId }).populate('wishes')
             })
             .then(user => {
-                if(!user) throw new Error(`user does not exist`)
-                if(!user.wishes.length) throw new Error('this user did not add any wish')
-                
+                if (!user) throw new Error(`user does not exist`)
+                if (!user.wishes.length) throw new Error('this user did not add any wish')
+
                 return user.wishes
             })
     },
@@ -107,40 +107,40 @@ const logic = {
      * @param {string} category optional 
      * 
      */
-    listProducts(query, category){
+    listProducts(query, category) {
         return Promise.resolve()
             .then(() => {
                 let filter = {}
 
-                if(query){
+                if (query) {
                     validate._validateQueryString('query', query)
 
-                    filter.title =  {
+                    filter.title = {
                         $regex: query,
                         $options: 'i'
                     }
                 }
-                if(category){
+                if (category) {
                     validate._validateStringField('category', category)
                     filter.category = category
-                } 
-                return Product.find({ finalDate: { $lt: Date.now() }})
+                }
+                return Product.find({ finalDate: { $lt: Date.now() } })
                     .then(res => {
                         res.forEach(product => {
-                            return Product.findByIdAndUpdate(product._id.toString(), {closed: true})
+                            return Product.findByIdAndUpdate(product._id.toString(), { closed: true })
                                 .then(res => res)
                         })
                     })
                     .then(() => {
-                        return Product.find(filter, { __v: 0}, {
+                        return Product.find(filter, { __v: 0 }, {
                             sort: {
                                 finalDate: 1
                             }
                         })
-                        .then(products => {
-                            if(!products.length) throw new Error(`products not found`)
-                            return products
-                        })
+                            .then(products => {
+                                if (!products.length) throw new Error(`products not found`)
+                                return products
+                            })
                     })
             })
     },
@@ -151,16 +151,23 @@ const logic = {
      * @param {string} productId 
      * 
      */
-    retrieveProduct(productId){
+    retrieveProduct(productId) {
         return Promise.resolve()
-            .then(() =>{
+            .then(() => Product.find({ finalDate: { $lt: Date.now() } })
+                .then(res => {
+                    res.forEach(product => {
+                        return Product.findByIdAndUpdate(product._id.toString(), { closed: true })
+                            .then(res => res)
+                    })
+                }))
+            .then(() => {
                 validate._validateStringField('product id', productId)
 
                 return Product.findOne({ '_id': productId })
             })
             .then(product => {
-                if(!product) throw new Error('product does not exist')
-
+                if (!product) throw new Error('product does not exist')
+                debugger
                 delete product._id
 
                 return product
@@ -173,15 +180,15 @@ const logic = {
      * @param {string} idUser 
      * 
      */
-    retrieveUser(idUser){
+    retrieveUser(idUser) {
         return Promise.resolve()
             .then(() => {
                 validate._validateStringField('user id', idUser)
-            
-                return User.findOne({ '_id': idUser}, { __v: 0, _id: 0})
+
+                return User.findOne({ '_id': idUser }, { __v: 0, _id: 0 })
             })
             .then(user => {
-                if(!user) throw new Error('user does not exist')
+                if (!user) throw new Error('user does not exist')
 
                 delete user._id
 
@@ -197,28 +204,35 @@ const logic = {
      * @param {number} price 
      * 
      */
-    addBid(productId, userId, price){
+    addBid(productId, userId, price) {
         return Promise.resolve()
             .then(() => {
                 validate._validateStringField('product id', productId)
                 validate._validateStringField('user id', userId)
                 validate._validateNumber(price)
-                return User.findOne({ '_id' : userId})
+                return User.findOne({ '_id': userId })
                     .then(user => {
-                        if(!user) throw Error(`no user found with this id`)
-                        
-                        return Product.findOne({ '_id' : productId})
-                            .then(productMatch => {   
-                                if(!productMatch)  throw Error(`no product found with id`)
-                                if(productMatch.closed) throw Error('Product closed')
+                        if (!user) throw Error(`no user found with this id`)
+
+                        return Product.find({ finalDate: { $lt: Date.now() } })
+                                .then(res => {
+                                    res.forEach(product => {
+                                        return Product.findByIdAndUpdate(product._id.toString(), { closed: true })
+                                            .then(res => res)
+                                    })
+                                })
+                            .then(() => Product.findOne({ '_id': productId })) 
+                            .then(productMatch => {
+                                if (!productMatch) throw Error(`no product found with id`)
+                                if (productMatch.closed) throw Error('Product closed')
                                 let minPrice
-                                if(productMatch.bids.length) minPrice = productMatch.bids[productMatch.bids.length - 1].price
+                                if (productMatch.bids.length) minPrice = productMatch.bids[productMatch.bids.length - 1].price
                                 else minPrice = productMatch.initialPrice
-                                if(minPrice >= price) throw Error('The price of the bid should be higher than the current price')
-    
+                                if (minPrice >= price) throw Error('The price of the bid should be higher than the current price')
+
                                 const bid = new Bid({ price, date: Date.now(), user: userId })
 
-                                return Product.findByIdAndUpdate(productId, { $push: {bids: bid}})
+                                return Product.findByIdAndUpdate(productId, { $push: { bids: bid } })
                                     .then(() => {
                                         user.bidded.push(productId)
                                         return user.save()
@@ -236,57 +250,57 @@ const logic = {
      * @param {string} userId 
      * 
      */
-    addWish(productId, userId){
+    addWish(productId, userId) {
         return Promise.resolve()
             .then(() => {
                 validate._validateStringField('product id', productId)
                 validate._validateStringField('user id', userId)
 
-                return User.findOne({ '_id' : userId})
+                return User.findOne({ '_id': userId })
                     .then(user => {
-                        if(!user) throw Error(`no user found with this id`)
+                        if (!user) throw Error(`no user found with this id`)
 
-                        return Product.findOne({ '_id' : productId})
+                        return Product.findOne({ '_id': productId })
                             .then(productMatch => {
-                                if(!productMatch)  throw Error(`no product found with id`)
-                                if(productMatch.closed) throw Error('Product closed')
-                                if(user.wishes.indexOf(productMatch._id) != -1) throw Error('You cannot add a product twice to de wish list')
+                                if (!productMatch) throw Error(`no product found with id`)
+                                if (productMatch.closed) throw Error('Product closed')
+                                if (user.wishes.indexOf(productMatch._id) != -1) throw Error('You cannot add a product twice to de wish list')
                                 user.wishes.push(productMatch._id)
                                 return user.save()
                             })
                             .then(() => true)
-                        })
+                    })
             })
     },
 
-        /**
-     * Allows you to delete a wish.
-     * 
-     * @param {string} productId 
-     * @param {string} userId 
-     * 
-     */
-    deleteWish(productId, userId){
+    /**
+ * Allows you to delete a wish.
+ * 
+ * @param {string} productId 
+ * @param {string} userId 
+ * 
+ */
+    deleteWish(productId, userId) {
         return Promise.resolve()
             .then(() => {
                 validate._validateStringField('product id', productId)
                 validate._validateStringField('user id', userId)
 
-                return User.findOne({ '_id' : userId})
+                return User.findOne({ '_id': userId })
                     .then(user => {
-                        if(!user) throw Error(`no user found with this id`)
-                        return Product.findOne({ '_id' : productId})
+                        if (!user) throw Error(`no user found with this id`)
+                        return Product.findOne({ '_id': productId })
                             .then(productMatch => {
-                                if(!productMatch)  throw Error(`no product found with id`)
-                                if(user.wishes.indexOf(productId) < 0) throw Error('You cannot delete a product that is not in your wish list')
-                                
+                                if (!productMatch) throw Error(`no product found with id`)
+                                if (user.wishes.indexOf(productId) < 0) throw Error('You cannot delete a product that is not in your wish list')
+
                                 let idPosition = user.wishes.indexOf(productId)
-                                user.wishes.splice(idPosition,1)
-    
+                                user.wishes.splice(idPosition, 1)
+
                                 return user.save()
                             })
                             .then(() => true)
-                        })
+                    })
             })
     }
 
