@@ -274,12 +274,12 @@ const logic = {
     },
 
     /**
- * Allows you to delete a wish.
- * 
- * @param {string} productId 
- * @param {string} userId 
- * 
- */
+     * Allows you to delete a wish.
+     * 
+     * @param {string} productId 
+     * @param {string} userId 
+     * 
+     */
     deleteWish(productId, userId) {
         return Promise.resolve()
             .then(() => {

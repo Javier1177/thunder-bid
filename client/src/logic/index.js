@@ -1,7 +1,7 @@
 const { validate } = require('../utils/validate')
 
 const logic = {
-    url: 'http://localhost:8080/api',
+    url: 'https://radiant-forest-85690.herokuapp.com/api',
 
     /**
      * Makes the call to the api

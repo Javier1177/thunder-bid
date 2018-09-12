@@ -5,7 +5,7 @@ class Wish extends Component {
     render() {
         return <div className="col-3 mt-3">
             <div className="card">
-                {this.props.product.closed ? <p className="card-text" style={{ textAlign: 'center', margin: '10px', padding: '5px', borderRadius: '2px', color: 'white', backgroundColor: '#F4F4F4' }}>Product closed</p> : <p style={{ textAlign: 'center', margin: '10px', padding: '5px', borderRadius: '2px', color: 'white', backgroundColor: '#66BB6A' }}>{this.props.product.finalDate.slice(0, 10)} at {this.props.product.finalDate.slice(11, 19)}H</p>}
+                {this.props.product.closed ? <p className="card-text" style={{ textAlign: 'center', margin: '10px', padding: '5px', borderRadius: '2px', color: 'white', backgroundColor: '#C82333' }}>Product closed</p> : <p style={{ textAlign: 'center', margin: '10px', padding: '5px', borderRadius: '2px', color: 'white', backgroundColor: '#66BB6A' }}>{this.props.product.finalDate.slice(0, 10)} at {this.props.product.finalDate.slice(11, 19)}H</p>}
                 <div className='card-img-top mt-4' style={{ backgroundImage: `url(${this.props.product.image})`, height: '100px', backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }}></div>
                 <div className="card-body">
                     <h5 className="card-title text-center">{this.props.product.title}</h5>

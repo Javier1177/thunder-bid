@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import logic from '../logic'
 import Product from './Product'
 import socketIOClient from "socket.io-client"
-const socket = socketIOClient('http://localhost:8080')
+const socket = socketIOClient('https://radiant-forest-85690.herokuapp.com')
 
 class Home extends Component {
 

@@ -5,6 +5,12 @@ body {
   min-height: 84vh;
   font-family: 'Montserrat', sans-serif;
      }
+
+#app-logo{
+  height: 45px;
+}
+
+
 .App {
   text-align: center;
 }

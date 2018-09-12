@@ -21,7 +21,6 @@ class App extends Component {
       this.setState({ userId, token })
       sessionStorage.setItem('userId',userId)
       sessionStorage.setItem('token',token)
-      this.props.history.push('/')
   }
 
   isLoggedIn = () => {
