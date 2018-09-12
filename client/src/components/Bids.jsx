@@ -9,6 +9,9 @@ class Bid extends Component {
                 <div className='card-img-top mt-4' style={{ backgroundImage: `url(${this.props.product.image})`, height: '100px', backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }}></div>
                 <div class="card-body">
                     <h5 class="card-title text-center">{this.props.product.title}</h5>
+                    {this.props.product && this.props.product.bids[this.props.product.bids.map(e => e.user).lastIndexOf(this.props.idUser)] === this.props.product.bids[this.props.product.bids.length-1] ?
+                     this.props.product.closed ? <div>Won</div> : <div>Wining</div>
+                    :<div>Losing</div>}
                     <p class="badge badge-pill badge-light" style={{ border: '1px solid #999', padding: '10px', padding: '10px 11px', lineHeight: '18px', borderRadius: '7px'}}> Your bid: <span class="badge badge-light" style={{padding: '6px', lineHeight: '10px', fontSize: '13px', marginLeft: '5px'}}>{this.props.product && this.props.product.bids[this.props.product.bids.map(e => e.user).lastIndexOf(this.props.idUser)].price} €</span></p>                   
                     <br />
                     <div className='row'>
