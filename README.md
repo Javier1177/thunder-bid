@@ -4,7 +4,7 @@
 
 [Documentation](doc)
 
-[Demo App](Soon!)
+[Demo App](http://thunder-bid.surge.sh/#/)
 
 If you want to try the app on your pc:
 
