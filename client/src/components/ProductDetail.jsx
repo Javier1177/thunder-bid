@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import { Link } from 'react-router-dom'
 import logic from '../logic'
 import swal from 'sweetalert2'
 import socketIOClient from "socket.io-client"
@@ -111,7 +112,7 @@ class ProductDetail extends Component {
                                 <button type="submit" className="btn btn-success mb-2 ml-2">Confirm bid</button>
                             </form>
                         : <p>You should Log In to make a bid</p>}
-                    {this.isLoggedIn() && !this.state.product.closed && <a onClick={this.saveWish} href="" className="text-primary">Mark it as a wish!</a>}
+                    {this.isLoggedIn() && !this.state.product.closed && <Link to='' onClick={this.saveWish} className="text-primary">Mark it as a wish!</Link>}
 
                 </div>
             </div>
